@@ -1,0 +1,16 @@
+\section{Meeting 7 - 23rd November 2017}
+
+\subsection{Meeting Notes:}
+
+I’ve resolved the random error we had last week.\\
+I’ve imported hashdb and have added functionality for users to create accounts and login on the yesod site.\\
+Yesod forms rely on bootstrap 3, so downgraded from bootstrap 4 (beta) to 3.
+
+For next time...\\
+I want to figure out how to concatenate a Text data variable in Yesod. Have to figure out how to deal with overloaded strings?\\
+Finish the user authentication functionality. Show appropriate messages and add extra validation to the yesod form (unique user and email, min and max length of fields).\\
+Create tests for the user authentication functionality.\\
+Change the forms on Django to use their form model rather than a HTML form. This will let me compare the pros and cons of Django’s and Yesod’s forms.\\
+If there is time, add functionality to allow users to post messages. These messages should be saved in the database so that the user can see all the messages they’ve posted when they log in.
+
+The user post message page should use ajax so when they post a message, the part of the div will just reload rather than the whole page.

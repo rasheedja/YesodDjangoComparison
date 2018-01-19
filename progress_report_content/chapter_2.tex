@@ -1,0 +1,17 @@
+\section{The Chosen Frameworks}
+
+Yesod is a Web Framework written in Haskell. The reason I chose Yesod is because, from my initial impressions, it seemed to be a fully featured and modular web framework. Yesod also claims to use features of the Haskell language to provide a fast, modular, and type safe web framework. One of the goals of the project is to see if Haskell's type safety, referential transparency, and lazy compiling is an advantage for web developers, so Yesod seems like a good choice to get the most out of Haskell's features.
+
+\begin{quote}
+Yesod attempts to ease the web development process by playing to the strengths of the Haskell programming language. Haskell’s strong compile-time guarantees of correctness not only encompass types; referential transparency ensures that we don’t have any unintended side effects. Pattern matching on algebraic data types can help guarantee we’ve accounted for every possible case. By building upon Haskell, entire classes of bugs disappear. \parencite[Introduction]{yesodBook}
+\end{quote}
+
+Django is a Python Web Framework. Django, like Yesod, is a ``batteries included'' web framework, ``instead of having to open up the language to insert your own power (batteries), you just have to flick the switch and Django does the rest.'' \parencite{djangoBookReasons}. I chose Django for a number of reasons
+
+\begin{itemize}
+  \item ``Batteries included'', like Yesod
+  \item Modular, like Yesod
+  \item Python is now more common than PHP, second only to node.js \parencite{djangoBookReasons}
+\end{itemize}
+
+The Django and Yesod web frameworks have a similar set of features. I believe that it will be possible to make a functionally identical site in both of these frameworks with a similar amount of effort. This would give us a fair comparison between Django and Yesod, allowing us to come to a conclusion on whether a Haskell web framework may be a good choice for a developer rather than a more tradition web framework.

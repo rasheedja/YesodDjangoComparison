@@ -225,3 +225,8 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 
+# Latexila backup files
+*.tex~
+*.bib~
+*.bbl~
+

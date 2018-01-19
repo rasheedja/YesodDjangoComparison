@@ -1,0 +1,67 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{mathptmx}
+\usepackage[toc,page]{appendix}
+\usepackage{parskip}
+\usepackage[style=authoryear,citestyle=authoryear,backend=biber]{biblatex}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{pdfpages}
+
+\addbibresource{progress_report_content/bibliography.bib}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\renewcommand{\lstlistingname}{Code}
+
+\title{Evaluation of a Haskell Web Framework - Progress Report \\ Computer Science}
+\author{Junaid Ali Rasheed}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\input{progress_report_content/chapter_1}
+\input{progress_report_content/chapter_2}
+\input{progress_report_content/chapter_3}
+\input{progress_report_content/chapter_4}
+
+\printbibliography[heading=bibintoc,title={References}]
+
+\begin{appendices}
+
+\chapter{Project Diary}
+\input{project_diary_content}
+
+\chapter{Ethics Form}
+\includepdf[pages=-]{pdf_documents/seas-ethics-student-project-CS-FYP.pdf}
+
+\chapter{Final Year Project Definition Form}
+\includepdf[pages=-]{pdf_documents/Final_Year_Project_Definition_Form.pdf}
+
+\end{appendices}
+
+\end{document}

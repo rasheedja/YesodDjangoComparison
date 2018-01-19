@@ -1,0 +1,55 @@
+\section{Progress So Far}
+
+I have started development on both the Django and Yesod websites. To ease the setup of a development environment, I have created vagrant boxes for both frameworks. Vagrant is a tool that allows you to automatically setup a virtual machine and install the operating system and a set of programs specified by you in a script. The vagrant box I have created automatically installs Ubuntu and the necessary tools required to develop for both Django and Yesod. Both sites are using a PostgreSQL database to ensure that any speed or database integrity comparisons are as fair as possible.
+
+Bootstrap is being used for styling for both websites. Using bootstrap allows me to easily ensure that both websites look attractive and identical from the frontend without much effort on my part. This allows me to focus on the functionality of the websites.
+
+Login and Signup functionality has been implemented on both websites. Users can visit the website homepage, create an account, and login to an existing account. The Yesod website also has functionality to create messages. These messages are displayed on the profile page of a user. I am currently in the middle of implementing the same functionality in Django.
+
+\subsection{Tests}
+
+The testing syntax for both frameworks is actually pretty similar. I have implemented tests for the login and signup functionality in both of the frameworks. The two code blocks below show a test in both frameworks. Both of these tests are ensuring that the correct error messages are displayed when a user does not provide any input in the login form.
+
+\begin{lstlisting}[caption="A Django Test"]
+def test_create_account_no_input(self):
+  """
+  If no data is input, a valid message is displayed and the user is redirected to the sign up form
+  """
+  response = self.client.get(reverse('base:register'), follow=True)
+  self.assertEqual(response.status_code, 200)
+  self.assertRedirects(response, reverse('base:signup'))
+  messages = list(response.context.get('messages'))
+  self.assertEqual(len(messages), 3)
+  for message in messages:
+    self.assertEqual(message.tags, 'danger error')
+  self.assertEqual(str(messages[0]), 'Please enter a username')
+  self.assertEqual(str(messages[1]), 'Please enter a password')
+  self.assertEqual(str(messages[2]), 'Please enter an email address')
+\end{lstlisting}
+
+\lstset{language=Haskell}
+
+\begin{lstlisting}[caption="A Yesod Test"]
+it "redirects to signup page with messages when no input is given" $ do
+  get SignupR
+  statusIs 200
+
+  request $ do
+    setMethod "POST"
+    setUrl SignupR
+    addToken
+    byLabel "Username" ""
+    byLabel "Email" ""
+    byLabel "Password" ""
+
+  statusIs 303
+  _ <- followRedirect
+  statusIs 200
+
+  htmlAnyContain ".alert-danger > span" "Value is required"
+  htmlCount ".alert-danger > span" 3
+\end{lstlisting}
+
+\subsection{Plans for the Immediate Future}
+
+The immediate plans for the future is to finish the message functionality in Django. Once this is finished, extensive tests will be written in both Django and Yesod for this functionality. Once I have finished working on these tests. I will start working on using AJAX in both frameworks. For AJAX, the plan is to refactor the post message functionality to use AJAX and to refactor the profile page to automatically update the messages posted by the owner of the profile page.
