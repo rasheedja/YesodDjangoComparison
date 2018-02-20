@@ -1,0 +1,57 @@
+\section{Meeting 10 - 15th February 2018}
+
+\subsection{Meeting Notes:}
+Created AJAX functionality for getting messages
+
+Resolved issue with using single template for profile by declaring the form stuff even if isCurrentUse is false, this is fine
+
+\subsubsection{What needs to be done}
+
+Add more tests this weekend for both frameworks. Does Haskell's type checking mean we need fewer tests compared to Python?
+
+\subsubsection{What to look at for evaluation}
+
+Evaluate:
+\begin{itemize}
+	\item{The ease of writing tests}
+	\item{In python, you need lots of testing because there's no static type checking}
+	\begin{itemize}
+    	\item{Does this mean you need less tests in Haskell}
+    	\item{Does this mean tests are easier to write in Haskell, or in Python because tests are more important in Python so they'd be easier to use}
+	\end{itemize}
+	\item{What types of tests are important in the haskell world}
+	\item{Some tests are unneeded for Haskell}
+	\item{Is it cheaper to build a bullet proof app in Haskell or Python, maintainability? etc}
+\end{itemize}
+
+Amount of users in Django makes it easier to find problems that others have experineced
+
+Amount of users in Django means more tools for Django but this is improving on the Haskell on the side
+
+The Yesod book written by the creator of Yesod is pretty good
+
+Some of the problems written by people using Yesod are more detailed, users are probably more experienced in the programming world? more academic?
+
+Evaluate the ease of adding a new feature after the site is complete
+
+Evaluate how quick it is to debug something
+
+Built in compiler and type checking in Haskell is very useful when debugging
+
+Evaluate page load speeds, is Python slower because it runs the interpreter every time?
+
+Scalability if you can
+
+Some quantitative data?
+
+Explain to the reader why some things make a big difference
+\begin{itemize}
+    \item{How long it takes to get a reliable application}
+    \begin{itemize}
+        \item{Length of tests? Number of tests? Instances where types catch important errors? These are very useful}
+        \item{Times where the type checking or other similar features got in your way?}
+        \begin{itemize}
+            \item{E.g. profile page was easier to code in Python, this was because of Haskell checking the scoping}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
