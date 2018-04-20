@@ -1,0 +1,100 @@
+\section{Software Development}
+
+This section records the development lifecycle of the Django and Yesod sites. More detailed commit messages
+can be found by running a \textit{git log} on the git repo for both sites.
+
+\subsection{Yesod Site}
+
+\subsubsection{1st November 2017}
+Created a basic homepage and a vagrantfile.
+
+\subsubsection{23rd November 2017}
+Implemented Login and Signup functionality
+
+\subsubsection{11th December 2017}
+Created a profile page
+
+\subsubsection{14th December 2017}
+Implemented message creation functionality and added some tests
+
+\subsubsection{15th February 2018}
+Modified profile page to retrieve messages using AJAX
+
+\subsubsection{19th March 2018}
+Implemented functionality to show other registered users on the profile page
+
+\subsubsection{20th March 2018}
+Basic functionality to follow users implemented
+
+\subsubsection{21st March 2018}
+Refactor profle page and follow functionality to use type safe URLs
+
+\subsubsection{22nd March 2018}
+Added functionality to allow users to follow eachother through normal usage of the site.
+Previously, users had to type in a URL to follow a user
+
+\subsubsection{31st March 2018}
+Refactored profile page. Separated pages used for logged in and anonymous users, reducing
+complexity. Refactoring also increased use of type safe URLs in the profile page and
+when posting messages.
+
+\subsubsection{1st April 2018}
+Updated stack resolver to latest point release for current resolver, ensuring we have
+the latest compatible updates for our packages. Fix some bugs and add tests.
+
+\subsubsection{2nd April 2018}
+Added tests for all route handlers and integrate tests with Travis CI.
+
+\subsubsection{4th April 2018}
+Implemented search functionality
+
+\subsubsection{5th April 2018}
+Tested the search functionality
+
+\subsubsection{6th April 2018}
+Added latest posted messages to the homepage and used a previously created datatype
+to help display posted messages on the frontend.
+
+\subsubsection{7th April 2018}
+Added hashtag functionality and fixed some bugs on the profile page. Hashtagged messages
+appear on the homepage.
+
+\subsubsection{10th April 2018}
+Added yesod prefix to database names so that the Yesod server can be ran the same
+time as the Django server.
+
+\subsubsection{11th April 2018}
+Removed unneeded visit button on profile page.
+
+\subsubsection{13th April 2018}
+Improved ordering of messages posted by other uses on your feed.
+
+\subsection{Django Site}
+
+\subsubsection{9th November 2017}
+Created the homepage and a vagrantfile.
+
+\subsubsection{14th November 2017}
+Implemented login and signup functionality
+
+\subsubsection{15th November 2017}
+Refactored authentication functionality to use Django's built in models rather than custom models.
+
+\subsubsection{31st January 2018}
+Implemented profile page and message creation functionality.
+
+\subsubsection{10th April 2018}
+Downgrade Django bootstrap version to bootstrap 3. This is the version used by Yesod so using
+version 3 reduces the amount of template work to do which does not provide much insight
+into the benefits of either framework.
+
+Implemented breadcrumbs and a base template file that all other template files use.
+
+\subsubsection{11th April 2018}
+Added AJAX functionality to the profile page.
+
+\subsubsection{12th April 2018}
+Completed the profile page and added search functionality
+
+\subsubsection{13th April 2018}
+Added tests and fixed any bugs discovered. Latest message and hashtagged messages added to the homepage.

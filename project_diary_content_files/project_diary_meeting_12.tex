@@ -1,0 +1,44 @@
+\section{Meeting 12 - 19th April 2018}
+
+\subsection{Meeting Notes:}
+Report draft, hand in by this weekend.
+
+Book in a meeting on Tuesday to discuss the report.
+
+Simulate mistakes and see how the haskell compilers help
+
+Argue against how the compiler may make you write unnecessary code
+
+\begin{itemize}
+  \item{Haskell version, I couldn't do something like if not null, ignore the block}
+  \item{You can try to use an undefined and force an exception}
+  \item{You can do something like "Error - (loc) shouldn't happen"}
+\end{itemize}
+
+Type safety saved a lot of time with checking variable types
+
+But people like python because of the lack of type checking
+
+It may be faster to ignore types when developing but it could cause problems later on
+
+In Yesod, there's types for entity Ids, and if the entity Id does not exist, it will 404
+
+Think about seperating language vs framework
+
+For this report, it's more useful to focus on the framework, but think about anything to do with the language
+
+For example, static type checking is to do with Haskell rather than Yesod
+
+In the yesod-test package, you can use HTML selectors. That makes testing static content easy.
+
+Django, you can test HTML page but selectors are not implemented. (If html page contains this string).
+
+If you have time after getting the report done...
+
+Load testing, deploy both apps to the same environment. Is there a tool for it. Send 
+multiple queries from multiple machines, time responses.
+
+If no tool, you can try requests from just your own machine.
+If you can't get it on Heroku, set up a VM.
+
+Test the ease of deployments for both frameworks. Test the actual production mode, not dev mode.
