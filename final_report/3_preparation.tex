@@ -1,0 +1,82 @@
+\chapter{Preparation}
+\label{chap:Preparation}
+
+In this chapter, we will discuss the work that needed to be done before work could
+be started on developing websites in Yesod and Django.
+
+\section{Planning the Website}
+
+Before any work was done, a plan was created that indicated the features the
+website should contain to ensure that the features of each framework are able
+to be fairly tested and evaluated. The website to be created was a twitter
+clone with the following features: a home page, authentication, a profile page,
+ability to post a message, ability to post `tagged' messages (any words with
+a preceding `\#' turns into a link that leads to a search page),
+ability to search for messages and users, and an ability to follow other users.
+All features implemented would also have unit tests implemented using the
+testing tools available in each framework. After each site is feature complete,
+a new feature, the ability to message other users, should be implemented.
+
+Implementing these features allows us to test page load speed by navigation
+to certain web pages. Safety can be tested by analysis how each framework deals with custom
+user input. We can evaluate how the static type checking and type safety features of 
+Haskell affects reliability when compared to dynamic type checking in Python. Testing
+all of our implemented features allows us to fairly evaluate the features of the
+test suites built into each framework. Implementing a new feature once each
+site is feature complete will also allow us to test the maintainability of
+each framework.
+
+By planning the website before any work was done, there was a clear vision of
+what the website should look like. This allowed development to focus on implementing
+the specified features rather than trying to create new features while developing
+at the same time, ensuring that functionally identical websites are created in both
+frameworks that can be fairly compared and evaluated.
+
+\section{Learning the Frameworks}
+
+Even after the planning was completed for both sites, before any development could
+be done, the basics of each framework must be learned. This ensures that code
+produced follows the latest standards of each framework, the built-in features
+of each framework that may help with development are understood and used appropriately,
+and code produced is of a high standard, maintainable, and readable.
+
+\subsection{Learning Django}
+
+Because of previous experience with Python and other object oriented web frameworks, 
+Django was learned quickly by going through the official Django tutorials and 
+documentation.
+
+The Django tutorials themselves were straight forward for someone who has 
+experience in Python and other web frameworks. The tutorials walk you through
+installing Django and creating your own app. In Django, an app resides in a project
+and is a web application that performs some function. An example of an app could be
+a web blogging system. A Django project is a collection of apps and configuration
+settings for a particular website. After completing the Django tutorials, work
+on the planned website was begun. \parencite{djangoIntroDocs}
+
+\subsection{Learning Yesod}
+
+Coming from an object oriented background, it was not trivial to start using
+a functional programming language like Haskell. Before development with the
+Yesod framework could be started, the Haskell language had to be learned to
+an adequate level.
+
+To help with learning Haskell, the book \citetitle{haskellBook} \parencite{haskellBook}
+was used. This book walks the reader through learning the Haskell language beginning
+with the fundamentals. Reading through several chapters of the book gives
+you a basic understanding of programming with Haskell, allowing you to
+start learning Yesod itself and referring to the book to understand more
+advanced concepts that you may come across while learning Yesod.
+
+To learn Yesod itself, the book \citetitle{yesodBook} \parencite{yesodBook}, 
+written by the person who wrote Yesod, was used. The book goes through all of the
+features of the Yesod framework in an easy to understand manner. After
+reading the book, development on the planned website using the Yesod
+framework began.
+
+\section{The Evaluation}
+
+Once the website was feature complete on both frameworks, a series of experiments
+were ran to compare the features that we planned to test during the planning phase.
+The raw data of these experiments can be found in the appendix and an evaluation
+of these results are discussed in chapter ~\ref{chap:Evaluation}.
