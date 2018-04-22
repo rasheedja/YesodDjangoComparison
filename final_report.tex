@@ -1,0 +1,103 @@
+\documentclass[a4paper,11pt,parskip,abstract=on,thesis,DIV=9]{scrreprt}
+% \documentclass[a4paper,11pt,abstract=on]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{mathptmx}
+\usepackage[page]{appendix}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{pdfpages}
+\usepackage{lipsum}
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{caption}
+\usepackage[style=apa,citestyle=apa,backend=biber,hyperref=true,apabackref=true]{biblatex}
+\usepackage{hyperref}
+\usepackage{doi}
+
+\DeclareLanguageMapping{english}{english-apa}
+
+\addbibresource{final_report/bibliography.bib}
+\setkomafont{disposition}{\normalfont\bfseries}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle={\small\ttfamily},    % the size of the fonts that are used for the code
+  breakatwhitespace=true,          % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  columns=flexible,
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Python,                 % the language of the code
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                     % sets default tabsize to 2 spaces
+}
+
+\renewcommand{\lstlistingname}{Code}
+
+\subject{Computer Science Final Year}
+\title{Evaluation of a Haskell Web Framework}
+\author{Junaid Ali Rasheed}
+
+
+\begin{document}
+\pagenumbering{roman}
+
+
+\maketitle
+
+\includepdf[pages=-]{pdf_documents/Final_Year_Project_Definition_Form_Signed.pdf}
+
+\tableofcontents
+\listoffigures
+
+\begin{abstract}
+\lipsum[1-3]
+\end{abstract}
+
+\pagenumbering{arabic}
+
+\include{final_report/1_introduction}
+\include{final_report/2_background}
+%\include{final_report/3_preparation}
+%\include{final_report/4_delivarable}
+%\include{final_report/5_evaluation}
+%\include{final_report/6_conclusion}
+
+\printbibliography[heading=bibintoc,title={References}]
+
+\begin{refsection}
+\nocite{*}
+\printbibliography[heading=bibintoc,title={Bibliography}]  
+\end{refsection}
+
+\begin{appendices}
+
+\chapter{Project Diary}
+\input{project_diary_content.tex}
+
+\chapter{Ethics Form}
+\includepdf[pages=1]{pdf_documents/seas-ethics-student-project-CS-FYP.pdf}
+
+\end{appendices}
+
+\end{document}

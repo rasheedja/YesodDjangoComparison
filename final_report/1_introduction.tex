@@ -1,0 +1,54 @@
+\chapter{Introduction}
+
+In this report, we will compare two web frameworks, one written in Haskell and another, more
+popular framework, written in a typical object oriented language. To perform the evaluation,
+a functionally identical website was created in both frameworks.
+
+One issue that individuals face when looking into Haskell Web frameworks is the lack of
+detailed comparisons between these frameworks and more traditional frameworks that these
+individuals likely have experience in. This report will provide an in-depth look at the
+advantages and disadvantages of choosing to use a Haskell Web Framework, and will help
+these individuals come to an informed decision on whether or not a Haskell Web Framework is
+best for them.
+
+\section{The Chosen Frameworks}
+
+Yesod is a fully featured and modular web framework written in Haskell. Yesod claims to use
+features of the Haskell language to provide a fast, modular, and type safe web framework. By
+choosing Yesod as the web framework for the Haskell language, we will be able to determine
+whether or not Haskell's type safety, referential transparency, and lazy compiling is an advantage
+or a disadvantage for web developers.
+
+\begin{quote}
+Yesod attempts to ease the web development process by playing to the strengths of the Haskell 
+programming language. Haskell’s strong compile-time guarantees of correctness not only encompass 
+types; referential transparency ensures that we don’t have any unintended side effects. Pattern 
+matching on algebraic data types can help guarantee we’ve accounted for every possible case. 
+By building upon Haskell, entire classes of bugs disappear. \parencite[Introduction]{yesodBook}
+\end{quote}
+
+Django is a Python Web Framework. Django, like Yesod, is a ``batteries included'' web framework,
+``instead of having to open up the language to insert your own power (batteries), you just have
+to flick the switch and Django does the rest.'' \parencite{djangoBookReasons}. I chose Django
+for a number of reasons
+
+\begin{itemize}
+  \item ``Batteries included'', like Yesod
+  \item Modular, like Yesod
+  \item Python is now more common than PHP, second only to Node.js \parencite{djangoBookReasons}
+\end{itemize}
+
+The Django and Yesod web frameworks have a similar set of features. This ensured that we could
+make a functionally identical site in both of these frameworks with a similar 
+amount of effort. This enables us to make a fair comparison between Django and Yesod, enabling
+us to come to a conclusion on whether a Haskell web framework may be a good choice for a 
+developer rather than a more tradition web framework.
+
+\section{The Report}
+
+The rest of this report will discuss any pieces of work similar to this project, the process of
+writing the code for both frameworks, including any preparation that had to be done, and a detailed
+evaluation of the websites that were produced. The evaluation will compare page load speeds,
+the reliability and maintainability of the websites, the ease of writing new code, the ease of
+debugging issues, the features including in each framework's test suite, and whether the static typing
+and type safety of the Haskell language help or hinder the process of developing a website.
