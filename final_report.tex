@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt,parskip,abstract=on,thesis,DIV=9]{scrreprt}
+\documentclass[a4paper,11pt,abstract=on,thesis,twoside]{report}
 % \documentclass[a4paper,11pt,abstract=on]{report}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -11,9 +11,12 @@
 \usepackage{lipsum}
 \usepackage{float}
 \usepackage{textcomp}
+\usepackage{bookmark}
 \usepackage[english]{babel}
 \usepackage{csquotes}
 \usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage[inner=35mm,outer=20mm]{geometry}
 \usepackage[style=apa,citestyle=apa,backend=biber,hyperref=true,apabackref=true]{biblatex}
 \usepackage{hyperref}
 \usepackage{doi}
@@ -21,7 +24,7 @@
 \DeclareLanguageMapping{english}{english-apa}
 
 \addbibresource{final_report/bibliography.bib}
-\setkomafont{disposition}{\normalfont\bfseries}
+% \setkomafont{disposition}{\normalfont\bfseries}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -37,12 +40,12 @@
   captionpos=b,                    % sets the caption-position to bottom
   commentstyle=\color{mygreen},    % comment style
   columns=flexible,
-  frame=single,	                   % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
   language=Python,                 % the language of the code
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  numbersep=0pt,
   rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
   showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
   showstringspaces=false,          % underline spaces within strings only
@@ -53,11 +56,16 @@
 }
 
 \renewcommand{\lstlistingname}{Code}
+\renewcommand{\lstlistlistingname}{List of Code Blocks}
 
-\subject{Computer Science Final Year}
-\title{Evaluation of a Haskell Web Framework}
+\title{
+  {Evaluation of a Haskell Web Framework}\\
+  {\large Aston University}
+  {\large BSC Computer Science}
+}
 \author{Junaid Ali Rasheed}
 
+\pagestyle{fancy}
 
 \begin{document}
 \pagenumbering{roman}
@@ -69,6 +77,7 @@
 
 \tableofcontents
 \listoffigures
+\lstlistoflistings
 
 \begin{abstract}
 \lipsum[1-3]
