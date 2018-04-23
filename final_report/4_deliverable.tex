@@ -8,11 +8,11 @@ and how we tested both frameworks.
 \section{The Website - Wire}
 
 Most of the features that we planned for were implemented in the final version
-of the website. The website was named wire and users can create an account,
-post messages, follow other users, see other users messages, post tagged
+of the website. The website was named `Wire' and users can create an account,
+post messages, follow other users, see user messages, post tagged
 messages, and search for other messages and users. The following subsections
 contain pictures of the website produced. The pictures taken are of the Yesod
-website but the Django site is mostly identical, with only a few minor styling
+website but the Django site is functionally identical, with only a few minor styling
 differences.
 
 \subsection{The Home Page}
@@ -30,19 +30,19 @@ with a separate list for tagged messages. Messages that contain tags are links
 that take the user to the search page. There is a navigation bar at the top of
 the home page. This navigation bar is present on all pages. When a user is not
 logged in, the navigation bar allows the user to access the login and signup pages.
-Once logged in, the user can user the navigation bar to access their profile page
+Once logged in, the user can use the navigation bar to access their profile page
 or to logout.
 
 \subsection{Authentication}
 
-\begin{figure}[H]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=0.7\textwidth]{final_report/pics/login.png}
     \caption{The login page}
     \label{fig:wireLogin}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=0.7\textwidth]{final_report/pics/signup.png}
     \caption{The signup page}
@@ -52,8 +52,8 @@ or to logout.
 The authentication functionality of this website includes signing up and
 logging in using a web page, and logging out using a button in the navigation
 bar. In figure ~\ref{fig:wireSignup}, you can see that signing up requires
-a username, e-mail, and password. The username and e-mail must be unique and
-users are shown a warning message if they try to sign up with details that
+a username, e-mail, and password. The username and e-mail must be unique.
+Users are shown a warning message if they try to sign up with details that
 are already taken. Once a user signs up, their details are stored in the
 database, with the password being hashed and salted to ensure that it is
 stored safely.
@@ -61,12 +61,11 @@ stored safely.
 When logging in, you only need to supply a username and password, as you can
 see in figure ~\ref{fig:wireLogin}. This is because the username is a unique
 identifier, we can use it to determine which user to log in as. When the username
-and password is submitted, we look up the username in the database and see if
-the provided password matches the one stored in the database after the same
-hashing and salting algorithms are performed on the password. If there is a
-match, the user is authenticated and redirected to the home page. If there
-is an issue, the user is redirected back to the login page with an appropriate
-error messages.
+and password is submitted, we look up the username in the database, encrypt the
+password, and see if the encrypted password matches the one stored in the database. 
+If there is a match, the user is authenticated and redirected to the home page. 
+If there is an issue, the user is redirected back to the login page with an 
+appropriate error messages.
 
 Once the user is logged in, they can use the log out button which is present
 on the top right of the navigation bar. Clicking this button immediately logs
@@ -172,7 +171,7 @@ to be compatible with a PostgreSQL database.
 \subsection{Defining Routes}
 
 URL routes are available routes in an application and are specified in the 
-`config/routes' file. In the file, you specify whether a request from a route is a
+`config/routes' file. In this file, you specify whether a request from a route is a
 GET or POST request, the handler that deals with the request, and any parameters
 that are part of the request. One of the features of Yesod is type safety in URLs,
 so you can specify the actual type that a URL parameter should be. If the user
@@ -197,11 +196,11 @@ In code block ~\ref{code:yesodRoutes}, you can see that there
 are two routes for the profile page. One, \texttt{/profile}, is for users
 viewing their own profile page and the other, \texttt{/profile/\#Text}, are
 for viewing the profile pages of the other users. The \texttt{\#Text} part
-of the route specified that there should be one parameter for this
+of the route specifies that there should be one parameter for this
 route with the type \texttt{Text}. If multiple parameters are provided or a parameter
-is not of the type \texttt{Text}, a 404 page is shown.
+is not of the type \texttt{Text}, a 404 error is shown.
 
-Further examples of URL parameters can be seen in the user routes. 
+Further examples of URL parameters can be seen in the \texttt{user} routes. 
 \texttt{/user/id/\#UserId} expects a user id as a parameter. If the specified
 id is not found, a 404 page is shown. \texttt{/users/\*[UserId]} expects a list
 of user ids, which would look like \texttt{/users/1/2/3/4/}.
@@ -229,14 +228,14 @@ the definition of the user entity extracted from the `config/models' file.
 
 \subsection{Handlers}
 
-Every URL route in the application points to a handler. The job of a handler
-is to perform any calculations or queries that need to be done and then respond
-to a request by loading a template file, returning a JSON object, or by redirecting
-to another handler.
+Every URL route in the application points to a handler. Handlers are located in
+the \texttt{src/handler} directory. They are used to perform any calculations or queries 
+that need to be done and then respond to a request by rendering a template file, 
+returning a JSON object, or by redirecting to another handler.
 
 Code block ~\ref{code:yesodGetProfileR} is the handler used to respond to get requests
 to display the profile page of the current user. The handler ensures the user is logged in,
-loads the users details, loads data on people being followed by the current user,
+loads the user's details, loads data on people being followed by the current user,
 and then loads the template file. The parameters that are created and available
 in the handler are also available in the template file.
 
@@ -260,12 +259,12 @@ in the handler are also available in the template file.
             $(widgetFile "currentprofile")
 \end{lstlisting}
 
-You may have noticed the message form being generated in code block ~\ref{code:yesodGetProfileR},
-this form was defined in Haskell and the source code can be seen in code block ~\ref{code:yesodMessageForm}.
-When defining the form, we give it a user id to specify the user creating a message, and
-we specify that the form is a bootstrap3 form with one input field that is required. Two
-hidden fields are also included in the form, the given user id and the current time, which
-is used to specify the time a message was created.
+You may have noticed the message form being generated in code block ~\ref{code:yesodGetProfileR}.
+This form is defined in Haskell and the source code can be seen in code block ~\ref{code:yesodMessageForm}.
+When defining the form, we give it a user id to specify the user creating a message, 
+we tell the form that there is one input field that is required. Two hidden fields
+are also included to ensure the form has all the data needed to create a message
+when it is submitted.
 
 \begin{lstlisting}[caption={The message form},label={code:yesodMessageForm}]
     messageForm :: UserId -> Form Message
@@ -326,10 +325,10 @@ to manually deal with invalid types or values.
 
 The templates used in Yesod are called Shakespearean templates. Shakespearean templates
 allow you to write type-safe templates that are compiled, helping prevent runtime errors.
-The syntax for Shakespearean templates are similar to the languages they are based on
+The syntax for Shakespearean templates are similar to the languages they are based on,
 with minor changes to the syntax used in the templates. For example, the HTML template language, Hamlet,
 uses indentation rather than opening and closing tags to denote nesting. Within these
-templates, you can use Haskell variables, create type-safe routes, and conditional
+templates, you can use Haskell variables, create type-safe routes, and implement conditional
 and looping logic. \parencite[Shakespearean Templates]{yesodBook}
 
 When a template file is loaded in a handler, the file is actually included inside
@@ -339,11 +338,11 @@ making it easier to change the layout of the whole site.
 
 A simple template file can be seen in code block ~\ref{code:yesodSearchHamlet}. In this
 block, you can see how indentation is used to determine nesting. Variable interpolation
-is done using \texttt{\#{variableName}}. You can see the form is being loaded using
-the \texttt{\^{widgetName}}, which renders the given widget onto the page. Type safe
-URLs are loaded using \texttt{\@{routeName optionalParameters}}.
+is done using \texttt{\#\{variableName\}}. You can see the form is being loaded using
+the \texttt{\string^\{widgetName\}}, which renders the given widget onto the page. Type safe
+URLs are loaded using \texttt{\string@\{routeName optionalParameters\}}.
 
-\begin{lstlisting}[caption={GET request handler for getting user data},label={code:yesodSearchHamlet}]
+\begin{lstlisting}[caption={Template file for the search page},label={code:yesodSearchHamlet}]
     <main>
         <div .container>
             <div .row>
@@ -354,7 +353,7 @@ URLs are loaded using \texttt{\@{routeName optionalParameters}}.
 \end{lstlisting}
 
 \subsection{Tests}
-The yesod test suite allows you to create BDD-style tests. When creating a test,
+The Yesod test suite allows you to create BDD-style tests. When creating a test,
 you specify what it should do, create any database entities you need, make a
 request to a handler, and examine the response to see if the data you received
 is correct. Code block ~\ref{code:yesodGetProfileTest} is an actual test
@@ -382,7 +381,7 @@ to you when compared to checking HTML responses. When checking JSON response, yo
 must examine the body of the response itself. You cannot check if a JSON key has
 a given value. See code block ~\ref{code:yesodGetAllUsers} below.
 
-\begin{lstlisting}[caption={Test the profile page},label={code:yesodGetAllUsers}]
+\begin{lstlisting}[caption={Checking a JSON response},label={code:yesodGetAllUsers}]
     it "asserts all users are returned when not authenticated" $ do
         _ <- createUser "foo" "foo@bar.com" "foo"
         _ <- createUser "bar" "bar@bar.com" "foo"
@@ -421,7 +420,7 @@ and a layout of files and directories that is preferred for Django apps. \parenc
 \subsection{Routes}
 
 Django routes are specified in the \texttt{urls.py} file within an app. The routes
-specify a path, a view that responds to requests from the given path, and a name
+specify a URL path, a view that responds to requests from the given path, and a name
 that is used to refer to a route within code. Django routes can contain URL parameters,
 like Yesod. The valid values for these parameters can be defined using regular expressions
 or a few built in types like \texttt{string} or \texttt{int}. To denote a list of parameters,
@@ -533,25 +532,13 @@ message is rendered.
                         messages.error(request, 'Error creating message, please contact support', extra_tags='danger')
                         return HttpResponseRedirect(reverse('wire_profile:current_profile'))
                 # ... each else condition renders an appropriate error message
-
-                def get_user_id(request, user_id):
-                """
-                Get the user with the given ID in JSON format
-            
-                :param request: The request that called this function
-                :param user_id: The user id
-                :return: user in JSON format
-                """
-                users = User.objects.filter(pk=user_id).values('username')
-                return JsonResponse(list(users), safe=False)
 \end{lstlisting}
 
 The method to retrieve URL parameters in Django differ depending on the type
-of view you use. For class-based views, URL parameters are retrieved using
+of view you use. For class-based views, URL parameter values are retrieved using
 the \texttt{kwargs} variable available in all class-based views, as seen in
-code block ~\ref{code:code:code:djangoSearchMessage}. For function-based views, a
+code block ~\ref{code:djangoSearchMessage}. For function-based views, a
 parameter is added to the function itself, as seen in code block ~\ref{code:djangoGetUserIds}. 
-This parameter is then populated with the value of the URL parameter sent in a request.
 
 \begin{lstlisting}[caption={Function-based view for returning user data},label={code:djangoGetUserIds}]
     def get_user_ids(request, user_ids):
@@ -564,7 +551,7 @@ This parameter is then populated with the value of the URL parameter sent in a r
         """
         user_ids_list = filter(bool, user_ids.split('/'))
         user_ids_list = list(map(int, user_ids_list))
-        users = User.objects.filter(pk__in=user_ids_list).values('username')
+        % users = User.objects.filter(pk__in=user_ids_list).values('username')
         return JsonResponse(list(users), safe=False)
 \end{lstlisting}
 
@@ -589,5 +576,96 @@ This parameter is then populated with the value of the URL parameter sent in a r
 \end{lstlisting}
 
 \subsection{Templates}
+The Django template language can be used in any HTML, CSS, and JavaScript
+file. The Django template language can be used to perform variable interpolation,
+conditional checks, loops, and creating default blocks of code that can be reused
+in other templates. Rendering these files executes the the template logic that the
+file contains. \parencite{djangoTemplates}
+
+\begin{lstlisting}[caption={Template file for the search page},label={code:djangoSearchTemplate}]
+    {% extends "base/global/base.html" %}
+
+    {% load django_bootstrap_breadcrumbs %}
+    {% load bootstrap3 %}
+    {% load static %}
+    
+    {% block breadcrumbs %}
+        {{ block.super }}
+        {% breadcrumb "Search" "wire_profile:search" %}
+    {% endblock %}
+    
+    {% block title %}
+        Search
+    {% endblock %}
+    
+    {% block content %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form id="search-form" class="inline form-horizontal" role=form method=post action="/search">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock %}
+\end{lstlisting}
+
+Code block ~\ref{code:djangoSearchTemplate} contains the source code for the
+template file used to render the search page. In this file, a base template
+is loaded, which is a full HTML page with the content divided up
+into a number of blocks. These blocks are then overridden in the search template
+to define breadcrumbs, set the page title, and write the markup for the main
+content of the page. Laying out template files like this eliminates repetitive
+code and keeps the Django template files similar to their Yesod counterparts,
+reducing the need to design different templates in both frameworks.
 
 \subsection{Tests}
+
+Django tests are contained in the \texttt{tests.py} file within an app. Tests
+are functions within a class. The process for testing in Django is similar to
+Yesod: we create any needed database entities at the beginning of a test,
+make a request, and check to see if the response is what we expect. Code
+block ~\ref{code:djangoCurrentProfileTest} is a test where a user account
+is created, logged in, and then the profile page for the user is loaded.
+Django does not have the functionality available in Yesod that allows you
+to test the content of a HTML page using CSS selectors, so instead, we test
+that the correct template is being loaded with the expected template variables.
+
+\begin{lstlisting}[caption={Django current profile test},label={code:djangoCurrentProfileTest}]
+    class CurrentProfileViewTest(TestCase):
+        # Other tests...
+        def test_current_profile_page_for_logged_in_users(self):
+            user = User.objects.create_user('testfoo', 'test@test.com', 'test')
+            self.client.post(reverse('base:verify'), {'username': user.username, 'password': 'test'})
+            response = self.client.get(reverse('wire_profile:current_profile'))
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.context['user'], user)
+            self.assertIsInstance(response.context['form'], NewWireForm)
+            self.assertTemplateUsed(response, 'wire_profile/current_profile.html')
+\end{lstlisting}
+
+In Django, we can still examine the content of a response, as seen in code block ~\ref{code:djangoCheckJsonResponse}.
+In this block, we make a JSON request decode the response, ensuring that the response
+content contains the expected data.
+
+\begin{lstlisting}[caption={Django checking a JSON response test},label={code:djangoCheckJsonResponse}]
+    class GetUserIdsTest(TestCase):
+        # Other tests...
+        def test_get_user_ids_one_user(self):
+            user = User.objects.create_user('foo', 'test@test.com', 'test')
+            user2 = User.objects.create_user('bar', 'bar@test.com', 'test')
+            user3 = User.objects.create_user('baz', 'baz@test.com', 'test')
+
+            response = self.client.get(reverse('wire_profile:get_user_ids', kwargs={'user_ids': str(user.id) + '/'}))
+            response_content = response.content.decode()
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('"username": "' + user.username + '"', response_content)
+            self.assertNotIn('"username": "' + user2.username + '"', response_content)
+            self.assertNotIn('"username": "' + user3.username + '"', response_content)
+\end{lstlisting}

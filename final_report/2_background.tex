@@ -20,13 +20,6 @@ of each framework, recording the amount of time it takes for each framework
 to respond to a request. The benchmark results can be seen in Figure 
 ~\ref{fig:snapBenchmark}. \parencite{snapFramework}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{final_report/pics/snapBenchmark.png}
-    \caption{Snap and other frameworks, values are in requests per second \\ \textcopyright{} \citeyear{snapFramework} IEEE}
-    \label{fig:snapBenchmark}
-\end{figure}
-
 Figure ~\ref{fig:snapBenchmark} shows the results of two benchmarks, one where a server
 responded to a request by sending the string "pong", and another that records how fast
 a server can send a 49 kilobyte image. As you can see in the
@@ -42,6 +35,13 @@ Haskell programs into native machine code, ensuring high performance, especially
 for concurrent programs such as web servers. Because of this, any Haskell web framework
 that uses GHC, including Yesod, will serve requests faster than most traditional
 web frameworks. \parencite{ghcSite}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{final_report/pics/snapBenchmark.png}
+    \caption{Snap and other frameworks, values are in requests per second \\ \textcopyright{} \citeyear{snapFramework} IEEE}
+    \label{fig:snapBenchmark}
+\end{figure}
 
 \citeauthor{haskellWebComparison} published a blog post on his website with the
 title \citetitle{haskellWebComparison}. In the post, \citeauthor{haskellWebComparison}
@@ -72,7 +72,7 @@ difficult. Because of this, the author had to spend a lot of time fixing type
 errors. \parencite{beginnerYesod}
 
 When first starting the project, I personally experienced the same issues described
-in \citeauthor{beginnerYesod}'s blog post. I was not very good at reading the type
+in \citeauthor{beginnerYesod}'s blog post. I found it difficult to understand the type
 signatures available on Hackage, resulting in spending a lot of time fixing
 unmatched type errors when trying to use functions not documented in the book.
 However, as I became more experienced in Yesod and Haskell, these problems
@@ -120,12 +120,12 @@ When Freckle switched their main API to Yesod, their CPU usage rose to 95\%. Thi
 did not occur during testing and profiling, in fact, the Freckle team were the first to
 experience this particular issue. This is one issue when using a relatively niche language
 like Haskell, you have to be comfortable with the idea that you may be the first person
-to experience a particular issue. With other popular frameworks like Django, any issue
+to experience a particular issue. With other popular frameworks, such as Django, any issue
 you discover has most likely been found and fixed by other members of the community.
 
 Despite these issues, Freckle decided to stick with Yesod due to the advantages of the
 Haskell compiler and the fact that the issues they experienced with regards to documentation
-and build time are improving. And although the community is small, you can almost
+and build time are improving. And, although the community is small, you can almost
 always find help by asking on the StackOverflow or Google Groups pages or by visiting
 the \#haskell-beginners IRC channel, an online chat room where developers new to Haskell
-can quickly and easily get help from some more experienced developers.
+can quickly and easily get help from more experienced developers.
