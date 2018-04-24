@@ -669,3 +669,111 @@ content contains the expected data.
             self.assertNotIn('"username": "' + user2.username + '"', response_content)
             self.assertNotIn('"username": "' + user3.username + '"', response_content)
 \end{lstlisting}
+
+\section{Comparison of Django and Yesod}
+
+This section consists of a comparison of both frameworks. A series of experiments
+were conducted as specified in the plan, the raw results of which can be found
+in appendix ~\ref{app:Experiments}. These results will be discussed along with
+features and limitations of both frameworks that stand out.
+
+To ensure that the results we collected were as fair as possible, two virtual
+machines with identical specifications were created. These virtual machines
+each contained 4 CPU cores and 4 Gigabytes of RAM. The codebase and the tools
+needed to run the site were installed onto these virtual machines. Each
+virtual machine was tested one at a time on the same computer, with the
+same applications running for all tests.
+
+\subsection{Page Load Speed}
+
+When testing page load speeds, each page was loaded three times. The time
+taken for each run was recorded as well as an average. In this section,
+we will be discussing the average times that were recorded. The raw
+results can be found in section ~\ref{sec:pageLoadSpeeds} in the appendix.
+
+Page load speed for both frameworks is very similar, with most pages having a
+couple of milliseconds difference in load times. For example, on average, the home page
+takes about 107ms to load in the Yesod framework, and 130ms to load in the
+Django framework. Creating a new message and then redirecting back to the
+profile page takes about 426ms in Yesod and 410ms in Django. The load speed
+of most pages are like this, neither framework really outperforms the other.
+
+For authentication, however, Django is much quicker than Yesod. In Django,
+creating an account and redirecting to the home page takes about 236ms. The
+same process takes 562ms in Yesod. Logging in to an existing account takes
+276ms in Django and 503ms in Yesod. The large differences in page load speeds
+seen here could be due to the authentication library used in Yesod.
+The plugin, `Yesod Auth HashDB', used
+to be a part of Yesod itself. It was removed in 2014 due to a weak hashing
+algorithm. The hashing algorithm used in the plugin has been improved and
+it now uses the PBKDF1 hashing algorithm.
+Django, on the other hand, includes an algorithm to securely store passwords
+that uses PBKDF2 rather than PBKDF1. This algorithm, by design, is rather
+slow, but the version difference in the hashing algorithm used and the
+default authentication settings in both frameworks could account for the
+differences seen in page load speed. An advantage of the Yesod authentication
+algorithm being slower is that it increases the difficulty of brute force attacks,
+which may have been desired when the algorithm was designed. \parencite{hashdbRepo,lastpassPasswordIterations}
+
+\subsection{Resource Usage}
+WIP
+
+I set-up EC2 instances for both apps today, so will rewire the page load
+speed section and write up this section tomorrow. Will hopefully get
+load testing working.
+
+\subsection{Debugging}
+WIP
+
+Cause some type errors here. See if Yesod compiles. Discuss Haskell's type safety
+vs Python's dynamic types. Mention how sometimes, type safety results in
+unnecessary code.
+
+\subsection{Documentation}
+
+The book, \citetitle{yesodBook}, will teach you almost all the features of the
+Yesod framework. The book has a lot of detail of how every feature in Yesod works,
+including templates, database entities, routing, and deployment. If the reader
+is familiar with Haskell, the book will give you the base knowledge needed
+in order to start developing a Yesod website.
+
+The problem with Yesod is that outside of topics in the book, the documentation
+of libraries used is, most of the time, not very detailed. Most of the documentation
+for these libraries are a couple of lines explaining what a function does and
+a Haskell type signature. For more experienced Haskell programmers, this is
+all you need to figure out how to use a function. However, for developers who
+are new to Haskell, examples and detailed explanations like the one given in
+the book are invaluable. This resulted in a lot of time being spent towards the
+beginning of the project trying to fix errors that would be trivial for more
+experienced developers. As the project progressed further, the documentation
+and type signatures provided by external libraries became easier to understand
+as knowledge of Haskell increased.
+
+The Django project also has excellent documentation. There are tutorials for
+beginners to get started with Yesod, tutorials for deploying Django websites,
+and documentation on almost all functions in the framework. Most of the
+documentation also contain usage examples which are invaluable for
+beginners who want to easily see how a function works. This is a definite
+advantage that Django has over Yesod. The Yesod book does have great
+usage examples but the documentation for external libraries is lacking.
+
+\subsection{Community}
+
+Django has millions of users. This means that any issue you come across,
+someone else has most likely already encountered and solved. This means that
+a lot of the time, when you come across an issue, you can just search for
+the error message and come across forum posts which discuss solutions
+for the exact same error that you are having.
+
+Yesod, on the other hand, has a much smaller community. It is likely that
+an issue that you are the only person experiencing a certain issue. This
+was certainly the case for when Freckle migrated to Yesod, as discussing in
+chapter ~\ref{chap:Background}. Because of this, beginners will likely find it
+harder to solve issues with Yesod when compared to Django.
+
+Although the Haskell community is small, experienced developers are almost always
+available to help beginners with issues if they make a post on an appropriate
+forum. In fact, with Yesod, you often see Michael Snoyman, the person who wrote
+the framework, answering questions posted by beginners. Developers can also
+join the \#haskell-beginners IRC channel where they can speak to an experienced
+developer about their issues in real time.
