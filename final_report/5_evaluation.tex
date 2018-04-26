@@ -1,2 +1,164 @@
 \chapter{Evaluation}
 \label{chap:Evaluation}
+In this chapter, we will discuss the quality of our comparison
+of Yesod and Django. We will look at the methods that we used
+to test each framework, whether or not these methods could
+be improved, any other tests we could have ran, and recommendations
+for further comparisons to be made.
+
+\section{The Websites}
+
+The websites that were created were functionally identical. These
+websites were usable, fully functional, and responsive.
+The websites allow users to create accounts, interact with forms,
+have their own profile pages, and search for other users or
+messages. These features are used by many websites
+in the real-world and by implementing these features, we
+were able to realistically evaluate both frameworks.
+
+There is one feature that was discussed in the project plan
+but was not included in the final implementation of our websites,
+and that was the messaging feature. This feature was planned
+to be implemented towards the end of development and would
+have evaluated the difficulty of making a large change to both
+frameworks. Due to time constrains, it was decided to abandon
+this feature and instead, run some measurable tests to quickly
+and reliably obtain some concrete data.
+
+\section{Site Hosting}
+
+Both of the websites were hosted on Amazon EC2 servers located
+in the same place with identical hardware specifications. This
+ensured that the only differing factor in our tests was the
+framework being used, giving us fair results. There is, however,
+one issue with the servers used, they were very underpowered,
+with 1GB of RAM and 1 CPU core. This may have been a limiting
+factor when measuring the performance of the frameworks, affecting
+our results. It would have been ideal to use a powerful server
+for our tests, but choices were limited with no budget available
+to host a more powerful server.
+
+\section{Testing Methods}
+
+This section will go through each experiment that was performed
+on the frameworks. We will discuss the merits of the test,
+the reliability of our results, and any way we could improve
+the test.
+
+\subsection{Page Load Speed Tests}
+
+These tests were performed on identical servers and were repeated
+three times. The time taken to load the page was taken from Chromium's
+developer tools under the network tab. An average was measured and
+this value was used for the actual comparison. This ensured that
+the results we measured were reliable and accurate. Measuring page
+load speeds is also an excellent way of measuring the performance
+of a web framework, as keeping page load speeds as low as possible
+is very important in order to ensure visitors do not get annoyed at
+long load times and leave a website.
+
+The reliability of results could have been improved by performing
+more repeats of our experiments. We could have measured the load
+time of specific AJAX requests to see if any stand out. Using
+servers with different specifications would also have been useful
+in order to see how more or less powerful hardware affects page
+load speeds.
+
+\subsection{Load Tests}
+
+Load tests were performed using a free service called RedLine13. With
+RedLine13, we were able to use a free Amazon EC2 instance to perform
+load tests. Unfortunately, these instances were limited to 80 users
+so we were not able to perform a large load test over a number of hours.
+We also only repeated this experiment three times in order to stay
+within Amazon's usage limits.
+
+The results that we obtained from this experiment confirmed what we found in the
+Page Load speed experiment, Pages in Yesod load 200-500ms faster than pages in Django.
+This experiment also resulted in high page load times of around 5 seconds. This
+is most likely because of how weak the hosting servers are. Using
+a powerful server would have been very useful to see how each framework
+works under very heavy loads.
+
+This experiment also told us that Yesod requests send much less data than Django
+due to the way Yesod minimises all static files by default.
+Using less data is a very desirable feature for web frameworks, as website
+visitors may be on limited plans and would prefer not to use websites
+that send a lot of data to their devices.
+
+\subsection{Resource Usage}
+
+This value was only measured once after the page load speed experiments
+were complete. Because of this, this value is not very reliable. Repeating
+our measurements and calculating an average would definitely increase the
+reliability of this result. It would have also been useful to measure this
+value every hour for an extended period of time, say, 24 hours. This would
+tell us how memory usage varies over time, and would tell us if there's
+any bug in the framework that may cause memory leaks.
+
+The value itself did tell us that resource usage is very similar in
+both frameworks, with Yesod coming out on top. This is a useful value
+for readers to know as some users will be mindful of resource usage when
+choosing a web framework for their project.
+
+\subsection{Continuous Integration}
+
+The values we got for this were from Travis CI's web interface. Travis CI
+was first integrated with the Yesod repository. It was added to the
+Django repository at a later date. This meant that there are much more
+build times in the Yesod repository compared to the Django repository.
+It would have been useful to have a similar number of builds to allow us
+to calculate a reliable average for build times.
+
+The value itself may be useful for developers who are concerned with long
+build times, but builds are completed in under five minutes for both
+repositories, which is not a significant amount of time. It does let
+readers know that testing in both frameworks does not take a significant
+amount of time, which would be a concern for developers who develop
+in a test driven manner.
+
+\subsection{Debugging}
+
+The simulated errors we performed in this test proved how the Haskell
+compiler can save the developer a lot of time when developing a website.
+In the first test, the compiler caught a bug where a new message was
+being saved using the form data itself rather than the message from the
+form data. This same bug was not caught by the Python interpreter. 
+In fact, Python automatically converted the form data, which was a map, 
+into a string, and stored the value in the database. A test case had
+to be added to ensure that this would be caught if a similar mistake
+would occur in the future.
+
+The second test, misspelling a variable name, also highlighted how
+the Haskell compiler can help developers quickly figure out how
+to fix their mistakes. The Haskell compiler printed a message
+stating the actual variable name that was misspelt. In this case,
+the Python interpreter also printed an appropriate exception message
+which mentioned that the variable used was undefined.
+
+\section{Further Comparisons}
+
+A refactor towards the end of development would have been very
+useful in our comparison. It would have given us information on
+how the Haskell compiler can guide you during a refactor. In
+theory, if you start the refactor as a small change and
+then compile your program, the Haskell compiler should guide you
+on where further changes need to be made. For example, if we
+decide to add a new field to the message entity, the Haskell
+compiler should tell us where the message entity is being used,
+helping us efficiently refactor us program.
+
+Under the free usage limits of Amazon Web Services, available EC2 
+servers are not very powerful and the monitoring tools are only 
+updated every five minutes. Because of this, only very limited
+load testing could be performed, with a maximum of 80 users It
+was infeasible to monitor load usage during a test due to the
+five minute wait between updates. These tests did tell us the
+amount of time it took to load a page and the total amount of
+data transferred, but it would have been useful to know how the
+web frameworks handle longer load tests. Longer load tests would
+have told us how each framework manages resources under load
+during extended periods of load. These tests may have identified
+issues, such as memory leaks, if they were able to be conducted.
+Unfortunately, these tests cannot be performed whilst staying
+within Amazon's free usage limits.

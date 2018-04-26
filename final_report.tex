@@ -15,7 +15,10 @@
 \usepackage[english]{babel}
 \usepackage{csquotes}
 \usepackage{caption}
+\usepackage{subcaption}
 \usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{xcolor}
 \usepackage[inner=35mm,outer=20mm]{geometry}
 \usepackage[style=apa,citestyle=apa,backend=biber,hyperref=true,apabackref=true]{biblatex}
 \usepackage{hyperref}
@@ -31,37 +34,37 @@
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 \lstset{frame=tb,
-  aboveskip=3mm,
-  belowskip=3mm,
-  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
-  basicstyle={\small\ttfamily},    % the size of the fonts that are used for the code
-  breakatwhitespace=true,          % sets if automatic breaks should only happen at whitespace
-  breaklines=true,                 % sets automatic line breaking
-  captionpos=b,                    % sets the caption-position to bottom
-  commentstyle=\color{mygreen},    % comment style
-  columns=flexible,
-  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-  keywordstyle=\color{blue},       % keyword style
-  language=Python,                 % the language of the code
-  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
-  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
-  numbersep=0pt,
-  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
-  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
-  showstringspaces=false,          % underline spaces within strings only
-  showtabs=false,                  % show tabs within strings adding particular underscores
-  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
-  stringstyle=\color{mymauve},     % string literal style
-  tabsize=2,	                     % sets default tabsize to 2 spaces
+	aboveskip=3mm,
+	belowskip=3mm,
+	backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+	basicstyle={\footnotesize\ttfamily},    % the size of the fonts that are used for the code
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=b,                    % sets the caption-position to bottom
+	commentstyle=\color{mygreen},    % comment style
+	columns=flexible,
+	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+	keywordstyle=\color{blue},       % keyword style
+	language=Python,                 % the language of the code
+	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+	numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+	numbersep=0pt,
+	rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+	stringstyle=\color{mymauve},     % string literal style
+	tabsize=2,	                     % sets default tabsize to 2 spaces
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}, % line breaks with arrows
 }
 
 \renewcommand{\lstlistingname}{Code}
 \renewcommand{\lstlistlistingname}{List of Code Blocks}
 
 \title{
-  {Evaluation of a Haskell Web Framework}\\
-  {\large Aston University}
-  {\large BSC Computer Science}
+	{Evaluation of a Haskell Web Framework}\\
+	{\large Aston University}\\
+	{\large BSC Computer Science}
 }
 \author{Junaid Ali Rasheed}
 
@@ -101,13 +104,14 @@
 
 \begin{appendices}
 
+\include{final_report/experiments}
+	
 \chapter{Project Diary}
 \input{project_diary_content.tex}
 
 \chapter{Ethics Form}
 \includepdf[pages=1]{pdf_documents/seas-ethics-student-project-CS-FYP.pdf}
 
-\include{final_report/experiments}
 
 \end{appendices}
 
