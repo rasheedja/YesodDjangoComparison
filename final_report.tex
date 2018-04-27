@@ -1,10 +1,9 @@
 \documentclass[a4paper,11pt,abstract=on,thesis,twoside]{report}
-% \documentclass[a4paper,11pt,abstract=on]{report}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{mathptmx}
-\usepackage[page]{appendix}
+\usepackage[toc,page]{appendix}
 \usepackage{listings}
 \usepackage{color}
 \usepackage{pdfpages}
@@ -19,7 +18,7 @@
 \usepackage{fancyhdr}
 \usepackage{amsmath}
 \usepackage{xcolor}
-\usepackage[inner=35mm,outer=20mm]{geometry}
+\usepackage[head=15mm,inner=35mm,outer=20mm]{geometry}
 \usepackage[style=apa,citestyle=apa,backend=biber,hyperref=true,apabackref=true]{biblatex}
 \usepackage{hyperref}
 \usepackage{doi}
@@ -60,6 +59,7 @@
 
 \renewcommand{\lstlistingname}{Code}
 \renewcommand{\lstlistlistingname}{List of Code Blocks}
+\raggedbottom
 
 \title{
 	{Evaluation of a Haskell Web Framework}\\
@@ -67,8 +67,6 @@
 	{\large BSC Computer Science}
 }
 \author{Junaid Ali Rasheed}
-
-\pagestyle{fancy}
 
 \begin{document}
 \pagenumbering{roman}
@@ -83,10 +81,26 @@
 \lstlistoflistings
 
 \begin{abstract}
-\lipsum[1-3]
+	In this report, we have evaluated a Haskell web framework. We did this by comparing
+	two websites, one made in a Haskell web framework called Yesod, and another made
+	in a Python web framework in Django. These websites were functionally identical
+	and were used to support our evaluation by running various experiments including
+	page load speeds and load tests. We also compared the documentation and community
+	support available for both frameworks. After evaluating all of our data, we came
+	to a conclusion that Yesod is a web framework that is ready to be used in a production
+	environment. Yesod is already being used on websites that have millions of users,
+	and has outperformed Django in the various tests that we performed. We found that the
+	type safety of the Haskell language will catch various bugs that may occur when
+	developing a website, but we also acknowledge that some developers prefer the dynamic
+	typing of a language like Python. In conclusion, we would recommend Yesod to
+	developers who are looking for a new web framework and are either experienced
+	in Haskell or are willing to dedicate time to learn the language.
 \end{abstract}
 
+\cleardoublepage
+
 \pagenumbering{arabic}
+\pagestyle{fancy}
 
 \include{final_report/1_introduction}
 \include{final_report/2_background}
@@ -105,13 +119,13 @@
 \begin{appendices}
 
 \include{final_report/experiments}
+\include{final_report/instructions}
 	
 \chapter{Project Diary}
 \input{project_diary_content.tex}
 
 \chapter{Ethics Form}
 \includepdf[pages=1]{pdf_documents/seas-ethics-student-project-CS-FYP.pdf}
-
 
 \end{appendices}
 

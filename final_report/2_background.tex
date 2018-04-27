@@ -1,9 +1,10 @@
 \chapter{Background}
 \label{chap:Background}
 
-In this chapter, we will discuss previous work and research pertaining
-to Haskell web frameworks and any real-world sites built using a Haskell
-web framework.
+In this chapter, we will explain the basics of our chosen frameworks,
+discuss previous work and research pertaining
+to Haskell web frameworks, and take a look at real-world sites built 
+using a Haskell web framework.
 
 \section{Similar Previous Work}
 
@@ -21,7 +22,7 @@ to respond to a request. The benchmark results can be seen in Figure
 ~\ref{fig:snapBenchmark}. \parencite{snapFramework}
 
 Figure ~\ref{fig:snapBenchmark} shows the results of two benchmarks, one where a server
-responded to a request by sending the string "pong", and another that records how fast
+responded to a request by sending the string ``pong", and another that records how fast
 a server can send a 49 kilobyte image. As you can see in the
 graph, for the file benchmark, the Snap framework was faster than all other frameworks.
 Snap was only beaten by Node.js in the Pong benchmark when logging was turned on.
@@ -39,7 +40,10 @@ web frameworks. \parencite{ghcSite}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{final_report/pics/snapBenchmark.png}
-	\caption{Snap and other frameworks, values are in requests per second \\ \textcopyright{} \citeyear{snapFramework} IEEE}
+	\captionsetup{justification=centering}
+	\caption{Snap and other frameworks, values are in requests per second \\
+	\parencite{snapFramework} \\
+	\textcopyright{} \citeyear{snapFramework} IEEE} 
 	\label{fig:snapBenchmark}
 \end{figure}
 

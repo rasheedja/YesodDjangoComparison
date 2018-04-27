@@ -350,12 +350,12 @@ messages was loaded. Results can be found in ~\ref{tab:loadTests}
 	\label{fig:djangoLoadTest3}
 \end{figure}
 
-\subsection{Introducing Realistic Errors}
+\section{Introducing Realistic Errors}
 
 For these tests, we purposefully made an error that could realistically happen.
 After we made the error, we see the error messages that each framework gives us.
 
-\subsubsection{Test 1}
+\subsection{Test 1}
 When creating a message, try to save the form results rather than
 the message extracted from the results into the database.
 
@@ -407,7 +407,7 @@ as well.
 	\label{fig:djangoMessageDBTest1}
 \end{figure}
 
-\subsubsection{Test 2}
+\subsection{Test 2}
 Simply misspell a variable name. Most IDE tools catch this anyway but
 error messages are useful to see. The misspelling was done in the code
 that returns recommended users on the profile page. This code returns

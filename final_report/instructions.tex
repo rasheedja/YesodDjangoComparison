@@ -1,0 +1,64 @@
+\chapter{Instructions}
+
+This section will give you instructions on how to run the frameworks on your own Machine.
+These instructions are for Ubuntu 16.04. The codebase is included on a CD attached to the
+physical copy of this report. I can also give you access to the GitHub repository if you
+email me at \texttt{rasheeja@aston.ac.uk}.
+
+\section{Yesod}
+
+Install postgresql 9.5
+\lstset{language=Bash}
+\begin{lstlisting}
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
+    sudo apt-get -y install postgresql postgresql-9.5 postgresql-client postgresql-common libpq-dev
+\end{lstlisting}
+Create the database
+\begin{lstlisting}
+    sudo -u postgres psql
+    CREATE USER wire WITH PASSWORD `wire';
+    CREATE DATABASE yesod_wire OWNER wire;
+    CREATE DATABASE yesod_wire_test OWNER wire;
+\end{lstlisting}
+\begin{lstlisting}
+    cd wire-yesod/yesod/wire
+    curl -sSL https://get.haskellstack.org/ | sh
+    stack build yesod-bin cabal-install --install-ghc
+    stack build
+\end{lstlisting}
+Run the development webserver
+\begin{lstlisting}
+    cd wire-yesod/yesod/wire
+    stack exec -- yesod devel
+\end{lstlisting}
+You should now be able to access the site at \texttt{localhost:3000}
+
+\section{Django}
+
+Install postgresql 9.5
+\begin{lstlisting}
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
+    sudo apt-get -y install postgresql postgresql-9.5 postgresql-client postgresql-common libpq-dev
+\end{lstlisting}
+Create the database
+\begin{lstlisting}
+    sudo -u postgres psql
+    CREATE USER wire WITH PASSWORD `wire';
+    CREATE DATABASE django_wire OWNER wire;
+    CREATE DATABASE django_wire_test OWNER wire;
+\end{lstlisting}
+Install pip and the necessary python libraries
+\begin{lstlisting}
+    sudo apt-get -y install python3-pip
+    sudo pip3 install --upgrade pip
+    sudo pip3 install psycopg2 Django django-bootstrap3 django-bootstrap-breadcrumbs
+\end{lstlisting}
+Make database migrations and run the development webserver
+\begin{lstlisting}
+    cd wire-django/django/wire
+    python3 manage.py migrate
+    python3 manage.py runserver
+\end{lstlisting}
+You should now be able to access the site at \texttt{localhost:8000}

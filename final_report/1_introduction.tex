@@ -1,11 +1,12 @@
 \chapter{Introduction}
 \label{chap:Introduction}
 
-In this report, we will compare two web frameworks, one written in Haskell and another, more
-popular framework, written in a typical object oriented language. To perform the evaluation,
-a functionally identical website was created in both frameworks.
+The goal of this report is to Evaluate a Haskell Web framework. To do this, two functionally
+identical websites were created. One website was created using a Haskell web framework,
+and another was created using a Python web framework. A number of tests were then performed
+to compare these websites, supporting our evaluation of the Haskell web framework.
 
-One issue that individuals face when looking into Haskell Web frameworks is the lack of
+One issue that individuals face when looking into Haskell web frameworks is the lack of
 detailed comparisons between these frameworks and more traditional frameworks that these
 individuals likely have experience in. This report will provide an in-depth look at the
 advantages and disadvantages of choosing to use a Haskell Web Framework, and will help
@@ -17,7 +18,7 @@ best for them.
 Yesod is a fully featured and modular web framework written in Haskell. Yesod claims to use
 features of the Haskell language to provide a fast, modular, and type safe web framework. By
 choosing Yesod as the web framework for the Haskell language, we will be able to determine
-whether or not Haskell's type safety, referential transparency, and lazy compiling is an advantage
+whether or not Haskell's type safety, referential transparency, and lazy evaluation is an advantage
 or a disadvantage for web developers.
 
 \begin{quote}
@@ -31,22 +32,22 @@ By building upon Haskell, entire classes of bugs disappear. \parencite[Introduct
 Django is a Python Web Framework. Django, like Yesod, is a ``batteries included'' web framework,
 ``instead of having to open up the language to insert your own power (batteries), you just have
 to flick the switch and Django does the rest.'' Django was chosen as the second framework
-because it is modular, like Yesod, and Python is one of the most common programming
-languages today, second only to Node.js. Python is also a dynamically typed
-language, which helped us evaluate whether or not Haskell's static type checking
-actually saves time and effort when developing.\parencite{djangoBookReasons}.
+because it is modular, like Yesod, and Python is one of the most common web programming
+languages today, second only to Node.js \parencite{djangoBookReasons}. Python is also a 
+dynamically typed language, which helped us evaluate whether or not Haskell's static
+type checking actually saves time and effort when developing.
 
 The Django and Yesod web frameworks have a similar set of features. This ensured that we could
 make a functionally identical site in both of these frameworks with a similar 
-amount of effort. This enables us to make a fair comparison between Django and Yesod, enabling
+amount of effort. This enabled us to make a fair comparison between Django and Yesod, enabling
 us to come to a conclusion on whether a Haskell web framework may be a good choice for a 
-developer rather than a more tradition web framework.
+developer rather than a more traditional web framework.
 
 \section{The Report}
 
 The rest of this report will discuss any pieces of work similar to this project, the process of
 writing the code for both frameworks, including any preparation that had to be done, and a detailed
 evaluation of the websites that were produced. The evaluation will compare page load speeds,
-the reliability and maintainability of the websites, the ease of writing new code, the ease of
-debugging issues, the features including in each framework's test suite, and whether the static typing
+the reliability of the websites, comparison of how the frameworks work under load, the ease of
+debugging issues, the features included in each framework's test suite, and whether the static typing
 and type safety of the Haskell language help or hinder the process of developing a website.
