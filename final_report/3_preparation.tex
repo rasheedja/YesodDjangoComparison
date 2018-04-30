@@ -7,8 +7,8 @@ be started on developing websites in Yesod and Django.
 \section{Planning the Website}
 
 Before any work was done, a plan was created that indicated the features the
-website should contain to ensure that the features of each framework are able
-to be fairly tested and evaluated. The website to be created was a twitter
+website should contain to ensure that the each framework is tested and
+evaluated fairly. The website to be created was a twitter
 clone with the following features: a home page, authentication, a profile page,
 ability to post a message, ability to post `tagged' messages (any words with
 a preceding `\#' becomes link that leads to a search page),
@@ -18,8 +18,7 @@ testing tools available in each framework. After each site is feature complete,
 a new feature, the ability to message other users, should be implemented.
 
 Implementing these features allows us to test page load speed by navigating
-to certain web pages. Safety can be tested by analysing how each framework deals with custom
-user input. We can evaluate how the static type checking and type safety features of 
+to certain web pages. We can evaluate how the static type checking and type safety features of 
 Haskell affects reliability when compared to dynamic type checking in Python. Testing
 all of our implemented features allows us to fairly evaluate the
 test suites included with each framework. Implementing a new feature once each
@@ -28,7 +27,7 @@ each framework.
 
 By planning the website before any work was done, there was a clear vision of
 what the website should look like. This allowed development to focus on implementing
-the specified features rather than trying to create new features while developing
+the specified features rather than trying to design new features while developing
 at the same time, ensuring that functionally identical websites are created in both
 frameworks that can be fairly compared and evaluated.
 
@@ -68,7 +67,7 @@ the reader a basic understanding of programming with Haskell, allowing the reade
 start learning Yesod itself, referring to the book to understand more
 advanced concepts as you come across them.
 
-To learn Yesod itself, the book \citetitle{yesodBook} \parencite{yesodBook}, 
+To learn Yesod, the book \citetitle{yesodBook} \parencite{yesodBook}, 
 written by the person who wrote Yesod, was used. The book goes through all of the
 features of the Yesod framework in an easy to understand manner. After
 reading the book, development on the planned website using the Yesod
@@ -79,4 +78,4 @@ framework was started.
 Once the website was feature complete on both frameworks, a series of experiments
 were ran to compare the features that we planned to test during the planning phase.
 The raw data of these experiments can be found in the appendix and an evaluation
-of these results are discussed in chapter ~\ref{chap:Evaluation}.
+of these results are discussed in the next chapter.

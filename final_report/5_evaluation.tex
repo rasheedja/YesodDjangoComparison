@@ -1,10 +1,10 @@
 \chapter{Evaluation}
 \label{chap:Evaluation}
-In this chapter, we will discuss the quality of our comparison
+In this chapter, we will discuss the websites that we created and
+the quality of our comparison
 of Yesod and Django. We will look at the methods that we used
 to test each framework, whether or not these methods could
-be improved, any other tests we could have ran, and recommendations
-for further comparisons to be made.
+be improved, and recommendations for further comparisons
 
 \section{The Websites}
 
@@ -55,7 +55,7 @@ the results we measured were reliable and accurate. Measuring page
 load speeds is also an excellent way of measuring the performance
 of a web framework, as keeping page load speeds as low as possible
 is very important in order to ensure visitors do not get annoyed at
-long load times and leave a website.
+having to wait long periods of time to load a page.
 
 The reliability of results could have been improved by performing
 more repeats of our experiments. We could have measured the load
@@ -96,7 +96,7 @@ value every hour for an extended period of time, say, 24 hours. This would
 tell us how memory usage varies over time, and would tell us if there's
 any bug in the framework that may cause memory leaks.
 
-The value itself did tell us that resource usage is very similar in
+The value that we recorded did tell us that resource usage is very similar in
 both frameworks, with Yesod coming out on top. This is a useful value
 for readers to know as some users will be mindful of resource usage when
 choosing a web framework for their project.
@@ -112,10 +112,10 @@ to calculate a reliable average for build times.
 
 The value itself may be useful for developers who are concerned with long
 build times, but builds are completed in under five minutes for both
-repositories, which is not a significant amount of time. It does let
-readers know that testing in both frameworks does not take a significant
-amount of time, which would be a concern for developers who develop
-in a test driven manner.
+repositories. This informs
+readers that testing in both frameworks does not take a significant
+amount of time, which would be a concern for developers who adopt
+a test driven methodology.
 
 \subsection{Debugging}
 
@@ -146,19 +146,17 @@ then compile your program, the Haskell compiler should guide you
 on where further changes need to be made. For example, if we
 decide to add a new field to the message entity, the Haskell
 compiler should tell us where the message entity is being used,
-helping us efficiently refactor us program.
+helping us efficiently refactor our program.
 
 Under the free usage limits of Amazon Web Services, available EC2 
 servers are not very powerful and the monitoring tools are only 
 updated every five minutes. Because of this, only very limited
-load testing could be performed, with a maximum of 80 users It
-was infeasible to monitor load usage during a test due to the
-five minute wait between updates. These tests did tell us the
+load testing could be performed, with a maximum of 80 users. Monitoring
+tools are also only updated every five minutes under the free plan, making
+it infeasible to monitor load usage during a test. These tests did tell us the
 amount of time it took to load a page and the total amount of
 data transferred, but it would have been useful to know how the
 web frameworks handle longer load tests. Longer load tests would
-have told us how each framework manages resources under load
+have also told us how each framework manages resources
 during extended periods of load. These tests may have identified
-issues, such as memory leaks, if they were able to be conducted.
-Unfortunately, these tests cannot be performed whilst staying
-within Amazon's free usage limits.
+issues such as memory leaks if they were able to be conducted.

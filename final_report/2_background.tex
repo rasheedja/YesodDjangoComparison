@@ -12,7 +12,7 @@ Looking through scientific journals, online articles, and blog posts,
 you can find many individuals documenting their experiences and performing
 reviews of Haskell Web Frameworks. For example, in the IEEE Internet Computing
 journal, \citeauthor{snapFramework} have written an article giving an overview
-of Snap. According to the article, snap is a simple web framework written
+of Snap. According to the article, Snap is a simple web framework written
 in Haskell where programming is done at a similar level of abstraction
 to Java servlets. The article instructs the reader on how to install Snap, 
 walks the reader through some sample code, and shows a quick comparison
@@ -33,9 +33,9 @@ So, from the research done by \citeauthor{snapFramework}, we can see that Haskel
 web frameworks can be significantly faster than more traditional web frameworks.
 This is because Haskell uses the Glasgow Haskell Compiler (GHC). GHC compiles
 Haskell programs into native machine code, ensuring high performance, especially
-for concurrent programs such as web servers. Because of this, any Haskell web framework
-that uses GHC, including Yesod, will serve requests faster than most traditional
-web frameworks. \parencite{ghcSite}
+for concurrent programs such as web servers \parencite{ghcSite}. 
+Because of this, any Haskell web framework that uses GHC, including Yesod,
+will serve requests faster than most traditional web frameworks.
 
 \begin{figure}[H]
 	\centering
@@ -113,9 +113,9 @@ Haskell builds are normally quite slow, as all external libraries used have to b
 compiled during the build process. \citeauthor{frontrow} mentions that builds took
 5-10 minutes on their most powerful machines. The author does mention that the team
 could improve their build process by, for example, caching built files. The testing
-suite caused problems for the team because when a test fails, they could not determine
+suite also caused problems for the team because when a test fails, they could not determine
 which condition caused the failure when a test block has multiple conditions. The issue,
-however, was reported to developers behind the testing library and the current
+however, was reported to developers who maintain the testing library and the current
 version of the testing suite does not have the issue mentioned in the article. The
 lack of documentation for some functions also caused some frustration to the development
 team, especially for the more junior developers who could not rely on type signatures. \parencite{frontrow}

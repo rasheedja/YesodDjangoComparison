@@ -75,14 +75,6 @@ the user out and they are redirected to the home page.
 	\label{fig:wireOtherProfile}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{final_report/pics/createWireForm.png}
-	\caption{The create message form}
-	\label{fig:wireCreateForm}
-\end{figure}
-
-
 The profile pages are probably the most complex with regards to logic in the
 entire website. There are two different profile pages, one for the currently
 logged in user which only they can see, and another for when someone is
@@ -93,7 +85,7 @@ their own profile page. On this page, they can see a list of messages posted
 by users that they follow, see which users are following them, follow and
 unfollow other users, and post their own messages. They can also post a
 new message by clicking on the `New Wire' button. Clicking this button
-displays a form which can be seen in figure ~\ref{fig:wireCreateForm}.
+displays a form with an input box for the user to enter their message.
 
 Figure ~\ref{fig:wireOtherProfile} is what the profile page looks like
 when a user navigates to another person's profile page, or when they click
@@ -171,7 +163,7 @@ files stored in the \texttt{src/} directory. These handlers are used to interact
 with database entities, load an appropriate template file, and then send
 a response to the user. \parencite[Understanding a Request]{yesodBook}
 
-The models file located in \texttt{config/models} specify all the database
+The models file located in \texttt{config/models} specifies all the database
 entities in this web application. Each entry in this file generates a database
 table and also creates helper functions for you to use in your Haskell code.
 The handlers normally interact with these entities to deal with certain requests.
@@ -214,8 +206,8 @@ An extract from the `config/routes' file can be seen in code block
 
 In code block ~\ref{code:yesodRoutes}, you can see that there
 are two routes for the profile page. One, \texttt{/profile}, is for users
-viewing their own profile page and the other, \texttt{/profile/\#Text}, are
-for viewing the profile pages of the other users. The \texttt{\#Text} part
+viewing their own profile page and the other, \texttt{/profile/\#Text}, is
+for viewing the profile page of another user. The \texttt{\#Text} part
 of the route specifies that there should be one parameter for this
 route with the type \texttt{Text}. If multiple parameters are provided or a parameter
 is not of the type \texttt{Text}, a 404 error is shown.
@@ -255,8 +247,8 @@ returning a JSON object, or by redirecting to another handler.
 
 Code block ~\ref{code:yesodGetProfileR} is the handler used to respond to get requests
 to display the profile page of the current user. The handler ensures the user is logged in,
-loads the user's details, loads data on people being followed by the current user,
-and then loads the template file. The parameters that are created and available
+loads the user's details,
+and then loads the template file. The variables that are available
 in the handler are also available in the template file.
 
 \lstset{language={Haskell}}
@@ -264,7 +256,7 @@ in the handler are also available in the template file.
 \begin{lstlisting}[caption={GET request handler for current profile page},label={code:yesodGetProfileR}]
 	-- Loads the 'My Profile' page for the currently logged in user. If someone
 	-- who is not logged in attempts to access the page, a 404 error will be shown.
-	getMyProfileR :: Handler Html -- This function will react to GET requests to the profile page
+	getMyProfileR :: Handler Html -- This function will respond to GET requests to the profile page
 	getMyProfileR = do
 		(Entity userId user) <- requireAuth -- Get the current user's data from the database
 		let username = userUsername user -- Extract username from the user
@@ -272,17 +264,17 @@ in the handler are also available in the template file.
 		-- Here, we generate a Haskell form to be used in a template file
 		(formWidget, formEnctype) <- generateFormPost $ messageForm userId
 		defaultLayout $ do -- Load the default layout that wraps around the loaded template
-			setTitle . toHtml $ userUsername user // Set the title of the profile page
-			$(widgetFile "currentprofile") // Load a template file
+			setTitle . toHtml $ userUsername user -- Set the title of the profile page
+			$(widgetFile "currentprofile") -- Load a template file
 \end{lstlisting}
 
 You may have noticed the message form being generated in code block ~\ref{code:yesodGetProfileR}.
 This form is defined in Haskell and the source code can be seen in code block ~\ref{code:yesodMessageForm}.
-When defining the form, we give it a user id to specify the user creating a message, 
-we tell the form that there is one input field that is required. Two hidden fields
-are also included to ensure the form has all the data needed to create a message
-when it is submitted.
+When defining the form, we give it a user id to specify the user creating a message. 
+We tell the form that there is one input field that is required. Two hidden fields
+are also included to ensure the form has all the data needed to create a message.
 
+\clearpage 
 \begin{lstlisting}[caption={The message form},label={code:yesodMessageForm}]
 	-- Here, we create a Bootstrap3 form for the Message entity
 	messageForm :: UserId -> Form Message
@@ -329,6 +321,8 @@ We specified the type of the URL parameter in the routes file (code block ~\ref{
 so Yesod will perform type checking for us, saving developers time from having
 to manually deal with invalid types or values.
 
+\clearpage
+
 \begin{lstlisting}[caption={GET request handler for getting user data},label={code:yesodGetUserGetIdR}]
 	-- | Takes in a user id and returns data on the user matching the given id.
 	-- If no user is found, an empty JSON object is returned.
@@ -347,7 +341,7 @@ to manually deal with invalid types or values.
 The templates used in Yesod are called Shakespearean templates. Shakespearean templates
 allow you to write type-safe templates that are compiled, helping prevent runtime errors.
 The syntax for Shakespearean templates are similar to the languages they are based on,
-with minor changes to the syntax used in the templates. For example, the HTML template language, Hamlet,
+with minor syntax changes. For example, the HTML template language, Hamlet,
 uses indentation rather than opening and closing tags to denote nesting. Within these
 templates, you can use Haskell variables, create type-safe routes, and implement conditional
 and looping logic. \parencite[Shakespearean Templates]{yesodBook}
@@ -360,7 +354,7 @@ making it easier to change the layout of the whole site.
 A simple template file can be seen in code block ~\ref{code:yesodSearchHamlet}. In this
 block, you can see how indentation is used to determine nesting. Variable interpolation
 is done using \texttt{\#\{variableName\}}. You can see the form is being loaded using
-the \texttt{\string^\{widgetName\}}, which renders the given widget onto the page. Type safe
+\texttt{\string^\{widgetName\}}, which renders the given widget onto the page. Type safe
 URLs are loaded using \texttt{\string@\{routeName optionalParameters\}}.
 
 \begin{lstlisting}[caption={Template file for the search page},label={code:yesodSearchHamlet}]
@@ -477,7 +471,7 @@ specify a URL path, a view that responds to requests from the given path, and a 
 that is used to refer to a route within code. Django routes can contain URL parameters,
 like Yesod. The valid values for these parameters can be defined using regular expressions
 or a few built in types like \texttt{string} or \texttt{int}. To denote a list of parameters,
-\texttt{path} can be used. An example of Django routes can be seen in code block ~\ref{code:djangoRoutes}.
+\texttt{<path:parameterName>} can be used. An example of Django routes can be seen in code block ~\ref{code:djangoRoutes}.
 
 \lstset{language={Python}}
 
@@ -514,7 +508,7 @@ the database schema. \parencite{djangoMigrations}.
 
 \subsection{Views}
 
-Views in Django are similar to Handlers in Yesod, they are used to determine
+Views in Django are similar to Handlers in Yesod, they are used to create
 a response for a given request. There are two main types of views that you can
 create in Django, class-based views and function-based views. The Django website
 produced contains a mixture of class-based and function-based views.
@@ -539,7 +533,7 @@ show an error message.
 			:return: Either redirect to the search page or render the profile page
 			"""
 			if request.user.is_authenticated:
-				context = self.get_context_data(**kwargs)
+				context = self.get_context_data(**kwargs) # context is a map of objects that can be used in the template
 				form = NewWireForm()
 				context['form'] = form
 				context['user'] = request.user
@@ -577,12 +571,12 @@ message is rendered.
 		:return: Display the profile page with a relevant message
 		"""
 		if request.method == 'POST':
-			form = NewWireForm(request.POST)
+			form = NewWireForm(request.POST) # Get the form data from the request
 			if form.is_valid():
 				if request.user.is_authenticated:
-					message = form.cleaned_data['message']
+					message = form.cleaned_data['message'] # Retrieve the message from the form data
 					try:
-						Message.objects.create(message_text=message, created=timezone.now(), user=request.user)
+						Message.objects.create(message_text=message, created=timezone.now(), user=request.user) # Save the message in the database
 						messages.success(request, 'Message created successfully', extra_tags='success')
 						return HttpResponseRedirect(reverse('wire_profile:current_profile'))
 					except DatabaseError:
@@ -591,7 +585,7 @@ message is rendered.
 				# ... each else condition renders an appropriate error message
 \end{lstlisting}
 
-The method to retrieve URL parameters in Django differ depending on the type
+The method to retrieve URL parameters in Django differs depending on the type
 of view you use. For class-based views, URL parameter values are retrieved using
 the \texttt{kwargs} variable available in all class-based views, as seen in
 code block ~\ref{code:djangoSearchMessage}. For function-based views, a
@@ -611,6 +605,8 @@ parameter is added to the function itself, as seen in code block ~\ref{code:djan
 		% users = User.objects.filter(pk__in=user_ids_list).values('username')
 		return JsonResponse(list(users), safe=False)
 \end{lstlisting}
+
+\clearpage
 
 \begin{lstlisting}[caption={Class-based view to search for a given message},label={code:djangoSearchMessage}]
 	class SearchMessageView(TemplateView):
@@ -638,6 +634,8 @@ file. The Django template language can be used to perform variable interpolation
 conditional checks, loops, and creating default blocks of code that can be reused
 in other templates. Rendering these files executes the the template logic that the
 file contains. \parencite{djangoTemplates}
+
+\newpage
 
 \begin{lstlisting}[caption={Template file for the search page},label={code:djangoSearchTemplate}]
 	{% extends "base/global/base.html" %}
@@ -707,7 +705,7 @@ that the correct template is being loaded with the expected template variables.
 \end{lstlisting}
 
 In Django, we can still examine the content of a response, as seen in code block ~\ref{code:djangoCheckJsonResponse}.
-In this block, we make a JSON request decode the response, ensuring that the response
+In this block, we make a JSON request, decode the response, and ensure that the response
 content contains the expected data.
 
 \begin{lstlisting}[caption={Django checking a JSON response test},label={code:djangoCheckJsonResponse}]
@@ -823,8 +821,8 @@ be found in table ~\ref{tab:loadTests}.
 			Page & Yesod (s) & Django (s) \\
 			\hline
 			Home & 4.96 & 5.54 \\
-			Profile & 5.05 & 4.94 \\
-			Profile & 4.97 & 5.13 \\
+			Profile 1st Run & 5.05 & 4.94 \\
+			Profile 2nd Run & 4.97 & 5.13 \\
 			Average & 4.99 & 5.20 \\
 			\hline
 		\end{tabular}
@@ -843,13 +841,13 @@ users. Yesod beat Django by a sizeable margin in this test, with
 Yesod sending, on average, 6.46MB of data per test and Yesod
 sending 18.19MB of data. This is because Yesod, by default, compresses
 all static files. If we load the home page of both websites, Yesod
-transfers 76.83kB of data which is decompressed to 246.57kB stored
+transfers 76.83kB of data which is decompressed to 246.57kB being stored
 on the disk. Django, on the other hand, transfers 243.49kB of data.
 
 \subsection{Resource Usage}
 
 Resource usage on both servers was measured after running the experiments
-detailed in the section ~\ref{sec:pageLoadSpeed}. All the information in 
+detailed in section ~\ref{sec:pageLoadSpeed}. All the information in 
 this section was obtained by examining output from htop, a process viewer. 
 On the server running Yesod, 109MB of RAM was being used. The server running 
 Django used 125MB of RAM.
@@ -860,7 +858,7 @@ other loads the configuration file for the web server. Altogether, these
 three processes use about 83MB of RAM in total, with 56MB of RAM being
 shared.
 
-On the Django server, gunicorn, when run with the default settings, creates
+On the Django server, gunicorn, when executed with the default settings, creates
 one sub-process. These two processes use around 65MB of RAM and share 19MB
 of RAM. nginx is not very memory intensive, using 6MB of RAM, sharing 3MB.
 In total, the Django server uses 71M of RAM, sharing 22MB.
@@ -869,7 +867,7 @@ Yesod is ahead of Django when it comes to resource usage. Even though all the
 Keter processes use more memory than gunicorn, most of the memory used by Keter
 is shared, resulting in the overall memory usage in the Yesod server being lower
 than the Django server. The RAM usage of the Django server is 16MB more than
-the Yesod server, but this difference is Negligible considering the resources
+the Yesod server, but this difference is negligible considering the resources
 available to most servers at this time.
 
 \subsection{Continuous Integration}
@@ -918,6 +916,8 @@ be seen in code block ~\ref{code:djangoMessageT1L}.
 			_ <- runDB . insert $ result -- new line, insert form data
 \end{lstlisting}
 
+\clearpage
+
 \lstset{language={Python}}
 \begin{lstlisting}[caption={Django Code Change},label={code:djangoMessageT1L}]
 	form = NewWireForm(request.POST) -- get the form
@@ -931,7 +931,7 @@ be seen in code block ~\ref{code:djangoMessageT1L}.
 \end{lstlisting}
 
 For Yesod, the simulated error caused a compilation error, with the exception
-message complaining about mismatched types, as seen in ~\ref{code:yesodT1E}. 
+message complaining about mismatched types, as seen in code block ~\ref{code:yesodT1E}. 
 For Django, however, no exception was thrown, even when submitting the message. 
 Further investigation showed that Python was converting the form data into a
 string, and then saved this string in the database. Because the message was saved 
@@ -981,11 +981,11 @@ code block ~\ref{code:djangoVarT2} for the Django change.
 
 The change caused a compilation error in Yesod. The exception message complained
 about the misspelled variable not being in scoped, and actually recommended the
-correct variable that should have been used ~\ref{code:yesodT2E}.
+correct variable that should have been used.
 For Django, the recommended users section did not load in the Profile page.
 Checking the network tab of the web developer tool built into the browser
-showed that the AJAX request responded with a 500 error. Loading the URL
-itself displayed an exception, with a stack trace and a message that said 
+showed that the AJAX request responded with a 500 error. Loading the URL used
+in the AJAX request displayed an exception, with a stack trace and a message that said 
 ``name `user' is not defined''.
 
 \lstset{language={Haskell}}
@@ -1006,7 +1006,7 @@ The problem with Yesod is that outside of topics in the book, the documentation
 of libraries used is, most of the time, not very detailed. Most of the documentation
 for these libraries are a couple of lines explaining what a function does and
 a Haskell type signature. For more experienced Haskell programmers, most of the
-timer, this is all you need to figure out how to use a function. You can also
+time, this is all you need to figure out how to use a function. You can also
 examine the source code if you need more information on how a function works.
 However, for developers who are new to Haskell, examples and detailed explanations
 like the one given in the book are invaluable. This resulted in a lot of time
@@ -1028,11 +1028,11 @@ usage examples but the documentation for external libraries is lacking.
 Django has millions of users. This means that any issue you come across,
 someone else has most likely already encountered and solved. This means that
 a lot of the time, when you come across an issue, you can just search for
-the error message and come across forum posts which discuss solutions
+the error message and come across forum posts discussing solutions
 for the exact same error that you are having.
 
 Yesod, on the other hand, has a much smaller community. It is likely that
-an issue that you are the only person experiencing a certain issue. This
+you are the only person experiencing a certain issue. This
 was certainly the case for when Freckle migrated to Yesod, as discussing in
 chapter ~\ref{chap:Background}. Because of this, beginners will likely find it
 harder to solve issues with Yesod when compared to Django.
@@ -1067,8 +1067,8 @@ find it hard to understand why your code won't compile, some of the documentatio
 of external libraries is poor, and you will not understand how a lot of the
 advanced Haskell features being used in Yesod work. If you need to find a web
 framework to start working on right away, then Yesod is not for you. If you are
-willing to learn Haskell and the framework itself, and you have the time to do
-it, then Yesod is a great choice. The Haskell community is friendly towards
+willing to learn Haskell and the framework itself, then Yesod is a great choice. 
+The Haskell community is friendly towards
 beginners and will be willing to help you if you are experiencing issues, and
 developing a Yesod application is a great way to develop your Haskell knowledge.
 
