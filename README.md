@@ -853,10 +853,10 @@ case result of
 ```
 
 ```Python
-form = NewWireForm(request.POST) -- get the form
+form = NewWireForm(request.POST) # get the form
 if form.is_valid():
 	if request.user.is_authenticated:
-		message = form.cleaned_data['message'] -- form.cleaned_data is a map of form values
+		message = form.cleaned_data['message'] # form.cleaned_data is a map of form values
 		try:
 			# Message.objects.create(message_text=message, ..) # original line, store the message
 			Message.objects.create(message_text=form.cleaned_data, ..) # changed line 1, store form values
