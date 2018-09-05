@@ -1,6 +1,9 @@
 Yesod vs Django: A Web Developers Comparison
 ============
 
+This article is based on a thesis for the final year of my undergraduate course. The full thesis can be found
+[here](final_report.pdf).
+
 In this article, we provide a comparison of two web frameworks; a Haskell
 framework called Yesod, and a Python framework called Django. This article
 should help you decide whether or not a Haskell web framework is right
@@ -96,13 +99,12 @@ database.
 
 ### An Overview
 
-Figure  \[fig:yesodOverview\] gives you a high level overview of how
+The figure bloewgives you a high level overview of how
 Yesod dispatches a request. By dispatch, we mean taking an incoming
-request and then generating an appropriate response [@yesodBook
-Understanding a Request].
+request and then generating an appropriate response.
 
 ![An overview of Yesod, from the Request to the Response<span
-data-label="fig:yesodOverview"></span>](final_report/pics/yesod_diagram.png){width="70.00000%"}
+data-label="fig:yesodOverview"></span>](final_report/pics/yesod_diagram.png)
 
 In the figure above, you can see that all requests go to the
 `config/routes` file. This file is used to specify valid routes in an
@@ -112,7 +114,7 @@ application, and will forward all requests to an appropriate Handler.
 A Handler is a more general term for a web application. Handlers are
 Haskell files stored in the `src/` directory. These handlers are used to
 interact with database entities, load an appropriate template file, and
-then send a response to the user. [@yesodBook Understanding a Request]
+then send a response to the user.
 
 The models file located in `config/models` specifies all the database
 entities in this web application. Each entry in this file generates a
@@ -136,24 +138,26 @@ handler that deals with the request, and any parameters that are part of
 the request. One of the features of Yesod is type safety in URLs, so you
 can specify the actual type that a URL parameter should be. If the user
 tries to navigate to a page with an invalid parameter, a 404 page will
-be shown. An extract from the ‘config/routes’ file can be seen in code
-block  \[code:yesodRoutes\] below.
+be shown. An extract from the ‘config/routes’ file can be seen in the code
+block below.
 
-    	-- This code block is an extract of the routes file. Each route is split into
-    	-- three parts. The first part is the actual URL route that the user will
-    	-- type. This route can contain a parameter which is mapped to a value from the URL.
-    	-- The second part specifies a Haskell module that will deal with a request
-    	-- from the given URL. The third part specifies the request types valid at this URL.
-    	/profile MyProfileR GET POST
-    	/profile/#Text ProfileR GET
-    	
-    	/user UserGetAllR GET
-    	/user-not-following UserGetAllExcludingFollowingR GET
-    	/user/#Text UserGetAllExcludingUsernameR GET
-    	/user/id/#UserId UserGetIdR GET
-    	/users/*[UserId] UserGetIdsR GET
+```Haskell
+-- This code block is an extract of the routes file. Each route is split into
+-- three parts. The first part is the actual URL route that the user will
+-- type. This route can contain a parameter which is mapped to a value from the URL.
+-- The second part specifies a Haskell module that will deal with a request
+-- from the given URL. The third part specifies the request types valid at this URL.
+/profile MyProfileR GET POST
+/profile/#Text ProfileR GET
 
-In code block  \[code:yesodRoutes\], you can see that there are two
+/user UserGetAllR GET
+/user-not-following UserGetAllExcludingFollowingR GET
+/user/#Text UserGetAllExcludingUsernameR GET
+/user/id/#UserId UserGetIdR GET
+/users/*[UserId] UserGetIdsR GET
+```
+
+In the code block above, you can see that there are two
 routes for the profile page. One, `/profile`, is for users viewing their
 own profile page and the other, `/profile/#Text`, is for viewing the
 profile page of another user. The `#Text` part of the route specifies
@@ -174,17 +178,19 @@ it’s fields, functions that the entity and it’s fields should include,
 and any fields that are unique, i.e. Cannot be shared with other
 entities. Once an entity is added to this file, it is created in the
 database when the codebase is compiled and helper functions are created
-that can be used when programming. Code block  \[code:yesodEntities\]
+that can be used when programming. The code block below
 contains the definition of the user entity extracted from the
 ‘config/models’ file.
 
-    	User json key -- Specify the name of the entity and some helper functions
-    		username Text Eq -- Specify entity fields and their types
-    		email    Text Eq
-    		password Text
-    		UniqueUser username
-    		UniqueEmail email
-    		deriving Typeable Show -- Some Haskell helper functions
+```Haskell
+User json key -- Specify the name of the entity and some helper functions
+	username Text Eq -- Specify entity fields and their types
+	email    Text Eq
+	password Text
+	UniqueUser username
+	UniqueEmail email
+	deriving Typeable Show -- Some Haskell helper functions
+```
 
 ### Handlers
 
@@ -193,88 +199,94 @@ used to perform any calculations or queries that need to be done and
 then respond to a request by rendering a template file, returning a JSON
 object, or by redirecting to another handler.
 
-Code block  \[code:yesodGetProfileR\] is the handler used to respond to
+The code block below is the handler used to respond to
 get requests to display the profile page of the current user. The
 handler ensures the user is logged in, loads the user’s details, and
 then loads the template file. The variables that are available in the
 handler are also available in the template file.
 
-    	-- Loads the 'My Profile' page for the currently logged in user. If someone
-    	-- who is not logged in attempts to access the page, a 404 error will be shown.
-    	getMyProfileR :: Handler Html -- This function will respond to GET requests to the profile page
-    	getMyProfileR = do
-    		(Entity userId user) <- requireAuth -- Get the current user's data from the database
-    		let username = userUsername user -- Extract username from the user
-    	
-    		-- Here, we generate a Haskell form to be used in a template file
-    		(formWidget, formEnctype) <- generateFormPost $ messageForm userId
-    		defaultLayout $ do -- Load the default layout that wraps around the loaded template
-    			setTitle . toHtml $ userUsername user -- Set the title of the profile page
-    			$(widgetFile "currentprofile") -- Load a template file
+```Haskell
+-- Loads the 'My Profile' page for the currently logged in user. If someone
+-- who is not logged in attempts to access the page, a 404 error will be shown.
+getMyProfileR :: Handler Html -- This function will respond to GET requests to the profile page
+getMyProfileR = do
+	(Entity userId user) <- requireAuth -- Get the current user's data from the database
+	let username = userUsername user -- Extract username from the user
 
-You may have noticed the message form being generated in code block
- \[code:yesodGetProfileR\]. This form is defined in Haskell and the
-source code can be seen in code block  \[code:yesodMessageForm\]. When
+	-- Here, we generate a Haskell form to be used in a template file
+	(formWidget, formEnctype) <- generateFormPost $ messageForm userId
+	defaultLayout $ do -- Load the default layout that wraps around the loaded template
+		setTitle . toHtml $ userUsername user -- Set the title of the profile page
+		$(widgetFile "currentprofile") -- Load a template file
+```
+
+You may have noticed the message form being generated inthe previous code block. This form is defined in Haskell and the
+source code can be seen below. When
 defining the form, we give it a user id to specify the user creating a
 message. We tell the form that there is one input field that is
 required. Two hidden fields are also included to ensure the form has all
 the data needed to create a message.
 
-    	-- Here, we create a Bootstrap3 form for the Message entity
-    	messageForm :: UserId -> Form Message
-    	messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
-    		<$> areq textField (bfs ("Message" :: Text)) Nothing -- A required text field
-    		<*> pure userId -- A hidden field containing the userId
-    		<*> lift (liftIO getCurrentTime) -- A hidden field containing the current time
+```Haskell
+-- Here, we create a Bootstrap3 form for the Message entity
+messageForm :: UserId -> Form Message
+messageForm userId = renderBootstrap3 BootstrapBasicForm $ Message
+	<$> areq textField (bfs ("Message" :: Text)) Nothing -- A required text field
+	<*> pure userId -- A hidden field containing the userId
+	<*> lift (liftIO getCurrentTime) -- A hidden field containing the current time
+```
 
-When the user submits the form, the post handler is ran, which can be
-seen in code block  \[code:yesodPostProfileR\]. In this handler, we use
+When the user submits the form, the post handler is ran (seen below).
+In this handler, we use
 the function `runFormPost` to check whether or not the form is valid. If
 the form is valid, the message is added to the database and the profile
 page is reloaded with a success message. If there’s an issue with the
 form, the profile page is reloaded with an appropriate error message.
 
-    	-- Create a new wire for the logged in user
-    	postMyProfileR :: Handler Html
-    	postMyProfileR = do
-    		(Entity userId _) <- requireAuth
-    		((result, _), _) <- runFormPost $ messageForm userId -- Get the message form from the post request
-    		case result of -- Check whether or not the message form is valid
-    			FormSuccess message -> do
-    				_ <- runDB . insert $ message -- Insert the message typed in by the user
-    				setSession "msgrendered" "true"
-    				setMessage $ renderSuccessMessage "Wire Sent" -- Set a message to be shown to the user
-    				redirect MyProfileR -- Reload the profile page
-    			FormFailure errors -> do
-    				let renderedMessages = map renderErrorMessage errors -- Collect all the error messages
-    				setSession "msgrendered" "true"
-    				setMessage $ toHtml renderedMessages -- Set the error messages to be shown to the user
-    				redirect MyProfileR
-    			FormMissing -> do
-    				setSession "msgrendered" "true"
-    				setMessage $ renderErrorMessage "Form is missing"
-    				redirect MyProfileR
+```Haskell
+-- Create a new wire for the logged in user
+postMyProfileR :: Handler Html
+postMyProfileR = do
+	(Entity userId _) <- requireAuth
+	((result, _), _) <- runFormPost $ messageForm userId -- Get the message form from the post request
+	case result of -- Check whether or not the message form is valid
+		FormSuccess message -> do
+			_ <- runDB . insert $ message -- Insert the message typed in by the user
+			setSession "msgrendered" "true"
+			setMessage $ renderSuccessMessage "Wire Sent" -- Set a message to be shown to the user
+			redirect MyProfileR -- Reload the profile page
+		FormFailure errors -> do
+			let renderedMessages = map renderErrorMessage errors -- Collect all the error messages
+			setSession "msgrendered" "true"
+			setMessage $ toHtml renderedMessages -- Set the error messages to be shown to the user
+			redirect MyProfileR
+		FormMissing -> do
+			setSession "msgrendered" "true"
+			setMessage $ renderErrorMessage "Form is missing"
+			redirect MyProfileR
+```
 
 If a route contains a URL parameter, the handler must also have a
-parameter to store the value of the given parameter. Code block
- \[code:yesodGetUserGetIdR\] is the source code for a handler that takes
+parameter to store the value of the given parameter. The code block
+below is the source code for a handler that takes
 in a user id as a parameter. As you can see, we do not have to check for
 the type of this parameter or whether it is not null. We specified the
-type of the URL parameter in the routes file (code block
- \[code:yesodRoutes\]) so Yesod will perform type checking for us,
+type of the URL parameter in the routes file so Yesod will perform type checking for us,
 saving developers time from having to manually deal with invalid types
 or values.
 
-    	-- | Takes in a user id and returns data on the user matching the given id.
-    	-- If no user is found, an empty JSON object is returned.
-    	getUserGetIdR :: UserId -> Handler Value
-    	getUserGetIdR userId = do -- Here, userId is a parameter from the URL
-    		users <- runDB $ selectList [UserId ==. userId] [] -- Load the user with the given user id from the database
-    		-- The map in the line below extracts the username from the user object and
-    		-- stores this in a new object called cleanUsers. This ensures that the
-    		-- user's email and (hashed) password is not given in the response. 
-    		let cleanUsers = map (\(Entity uid (User uname _ _)) -> (object ["id" .= uid, "username" .= uname])) users
-    		returnJson cleanUsers
+```Haskell
+-- | Takes in a user id and returns data on the user matching the given id.
+-- If no user is found, an empty JSON object is returned.
+getUserGetIdR :: UserId -> Handler Value
+getUserGetIdR userId = do -- Here, userId is a parameter from the URL
+	users <- runDB $ selectList [UserId ==. userId] [] -- Load the user with the given user id from the database
+	-- The map in the line below extracts the username from the user object and
+	-- stores this in a new object called cleanUsers. This ensures that the
+	-- user's email and (hashed) password is not given in the response. 
+	let cleanUsers = map (\(Entity uid (User uname _ _)) -> (object ["id" .= uid, "username" .= uname])) users
+	returnJson cleanUsers
+```
 
 ### Templates
 
@@ -294,64 +306,69 @@ is common to all pages. This ensures that code does not need to be
 repeated, reducing the chance of mistakes and making it easier to change
 the layout of the whole site.
 
-A simple template file can be seen in code block
- \[code:yesodSearchHamlet\]. In this block, you can see how indentation
+A simple template file can be seen below.
+In this block, you can see how indentation
 is used to determine nesting. Variable interpolation is done using
 `#{variableName}`. You can see the form is being loaded using , which
 renders the given widget onto the page. Type safe URLs are loaded using
 `@{routeName optionalParameters}`.
 
-    	<main>
-    		<div .container>
-    			<div .row>
-    				<div .col-sm-12>
-    					<form #search-form .inline .form-horizontal role=form method=post action=@{SearchR} enctype=#{formEnctype}>
-    						^{formWidget}
+```HTML
+<main>
+	<div .container>
+		<div .row>
+			<div .col-sm-12>
+				<form #search-form .inline .form-horizontal role=form method=post action=@{SearchR} enctype=#{formEnctype}>
+					^{formWidget}
+```
 
 ### Tests
 
 The Yesod test suite allows you to create BDD-style tests. When creating
 a test, you specify what it should do, create any database entities you
 need, make a request to a handler, and examine the response to see if
-the data you received is correct. Code block
- \[code:yesodGetProfileTest\] is an actual test from the website. The
+the data you received is correct. The code block
+below is an actual test from the website. The
 test creates and logs in as a new user, loads the profile page, and
 ensures that the resulting HTML contains the text that it should
 contain. Yesod gives you the ability to use CSS selectors when checking
 the HTML page given by a response, allowing you to be very specific.
 
-    	it "asserts that the current profile page looks right" $ do
-    		foo <- createUser "foo" "foo@bar.com" "foo"
-    		authenticateAs foo
+```Haskell
+it "asserts that the current profile page looks right" $ do
+	foo <- createUser "foo" "foo@bar.com" "foo"
+	authenticateAs foo
 
-    		get MyProfileR
-    		htmlAnyContain "h3" "Your Page"
-    		htmlAnyContain "h3" "Your Feed"
-    		htmlAnyContain "h3" "Followers"
-    		htmlAnyContain "h3" "Following"
-    		htmlAnyContain "h3" "Other Users"
+	get MyProfileR
+	htmlAnyContain "h3" "Your Page"
+	htmlAnyContain "h3" "Your Feed"
+	htmlAnyContain "h3" "Followers"
+	htmlAnyContain "h3" "Following"
+	htmlAnyContain "h3" "Other Users"
+```
 
 The testing suite also has the ability to check if a JSON response
 contains the data that we expect. However, you do not have the same
 helper functions available to you when compared to checking HTML
 responses. When checking JSON response, you must examine the body of the
-response itself. You cannot check if a JSON key has a given value. See
-code block  \[code:yesodGetAllUsers\] below.
+response itself. You cannot check if a JSON key has a given value.
 
-    	it "asserts all users are returned when not authenticated" $ do
-    		_ <- createUser "foo" "foo@bar.com" "foo"
-    		_ <- createUser "bar" "bar@bar.com" "foo"
-    		_ <- createUser "baz" "baz@bar.com" "foo"
+```Haskell
+it "asserts all users are returned when not authenticated" $ do
+	_ <- createUser "foo" "foo@bar.com" "foo"
+	_ <- createUser "bar" "bar@bar.com" "foo"
+	_ <- createUser "baz" "baz@bar.com" "foo"
 
-    		get UserGetAllR
+	get UserGetAllR
 
-    		bodyContains "username"
-    		bodyContains "id"
-    		bodyNotContains "email"
-    		bodyNotContains "password"
-    		bodyContains "foo"
-    		bodyContains "bar"
-    		bodyContains "baz"
+	bodyContains "username"
+	bodyContains "id"
+	bodyNotContains "email"
+	bodyNotContains "password"
+	bodyContains "foo"
+	bodyContains "bar"
+	bodyContains "baz"
+```
 
 The Django Implementation
 -------------------------
@@ -366,7 +383,7 @@ contains all the settings needed for a Django website. This includes
 database settings, the apps being used, application settings, and
 Django-specific settings. To create the project, the `django-admin` tool
 was used. This tool generates the code needed to connect to a database
-and start a Django site. [@djangoIntroDocs]
+and start a Django site.
 
 ### Creating Apps
 
@@ -377,12 +394,11 @@ the application, database entities, views that respond to requests,
 templates, and tests. The `manage.py` tool provided by Django was used
 to create apps. This tool creates a directory with a specified name and
 a layout of files and directories that is preferred for Django apps.
-[@djangoIntroDocs]
 
 ### An Overview
 
 This subsection will give you a high level overview of how Django works.
-Figure  \[fig:djangoOverview\] shows you how Django generates a response
+The figure below shows you how Django generates a response
 from a user’s request. In the diagram, you can see that all requests
 first go to the `urls.py` file. In this file, a request is matched with
 an entry in the file, and this entry forwards the response to an
@@ -395,7 +411,7 @@ A view is python function that takes in a request and generates an
 appropriate response. A valid response could be a HTML page, an HTML
 error, JSON data, etc. To generate an appropriate response, a view may
 interact with a model, or it may need to load a template file. Views are
-defined in the `views.py` file. [@djangoViews].
+defined in the `views.py` file.
 
 Models, located in `models.py` are used to define database entities in
 an application. Each entry is written as a class and is mapped to a
@@ -415,34 +431,37 @@ Django routes can contain URL parameters, like Yesod. The valid values
 for these parameters can be defined using regular expressions or a few
 built in types like `string` or `int`. To denote a list of parameters,
 `<path:parameterName>` can be used. An example of Django routes can be
-seen in code block  \[code:djangoRoutes\].
+seen in code block below.
 
-    	# The path function below takes in three variables. The first
-    	# variable is the URL path for the request, the second parameter
-    	# links to a view that will handle a request, and the third
-    	# parameter is the name for the route that can be used in Python code
-    	path('following/<path:username>', views.get_following, name='get_following'),
-    	path('users/<path:user_ids>', views.get_user_ids, name='get_user_ids'),
-    	path('user/id/<int:user_id>', views.get_user_id, name='get_user_id'),
-    	path('search', SearchView.as_view(), name='search'),
+```Python
+# The path function below takes in three variables. The first
+# variable is the URL path for the request, the second parameter
+# links to a view that will handle a request, and the third
+# parameter is the name for the route that can be used in Python code
+path('following/<path:username>', views.get_following, name='get_following'),
+path('users/<path:user_ids>', views.get_user_ids, name='get_user_ids'),
+path('user/id/<int:user_id>', views.get_user_id, name='get_user_id'),
+path('search', SearchView.as_view(), name='search'),
+```
 
 ### Database Entities
 
 Database entities are defined as classes in the `models.py` file within
 an app. The variables inside each class are used to determine the names
-and types of entity’s fields. You can see an example of a Django model
-in  \[code:djangoEntities\]. When an entity is created or modified,
+and types of entity’s fields. When an entity is created or modified,
 Django migrations must be created and then ran using the `manage.py`
 tool. Migrations are used by Django to ensure changes you make to models
 are executed in the database schema. [@djangoMigrations].
 
-    	class Message(models.Model):
-    		message_text = models.CharField(max_length=280)
-    		created = models.DateTimeField('created')
-    		user = models.ForeignKey(User, on_delete=models.CASCADE)
+```Python
+class Message(models.Model):
+	message_text = models.CharField(max_length=280)
+	created = models.DateTimeField('created')
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    		def __str__(self):
-    			return self.message_text
+	def __str__(self):
+		return self.message_text
+```
 
 ### Views
 
@@ -452,110 +471,115 @@ that you can create in Django, class-based views and function-based
 views. The Django website produced contains a mixture of class-based and
 function-based views.
 
-Code block  \[code:djangoCurrentProfileView\] is a class-based view used
+The code block below is an example of a class-based view used
 to render the profile page for the current user. In this view, we check
 if the user is authenticated and then render the profile page for the
 authenticated user. If the user is not authenticated, we redirect them
 to the home page and show an error message.
 
-    	class CurrentProfileView(TemplateView):
-    		template_name = "wire_profile/current_profile.html"
+```Python
+class CurrentProfileView(TemplateView):
+	template_name = "wire_profile/current_profile.html"
 
-    		def get(self, request, *args, **kwargs):
-    			"""
-    			Get the current profile if the user is logged in.
+	def get(self, request, *args, **kwargs):
+		"""
+		Get the current profile if the user is logged in.
 
-    			:param request: The current request
-    			:param args: sent to parent method
-    			:param kwargs: sent to parent method
-    			:return: Either redirect to the search page or render the profile page
-    			"""
-    			if request.user.is_authenticated:
-    				context = self.get_context_data(**kwargs) # context is a map of objects that can be used in the template
-    				form = NewWireForm()
-    				context['form'] = form
-    				context['user'] = request.user
-    				return self.render_to_response(context)
-    			else:
-    				messages.error(request, 'You must log in to view your profile page', extra_tags='danger')
-    				return HttpResponseRedirect(reverse('base:home'))
+		:param request: The current request
+		:param args: sent to parent method
+		:param kwargs: sent to parent method
+		:return: Either redirect to the search page or render the profile page
+		"""
+		if request.user.is_authenticated:
+			context = self.get_context_data(**kwargs) # context is a map of objects that can be used in the template
+			form = NewWireForm()
+			context['form'] = form
+			context['user'] = request.user
+			return self.render_to_response(context)
+		else:
+			messages.error(request, 'You must log in to view your profile page', extra_tags='danger')
+			return HttpResponseRedirect(reverse('base:home'))
+```
 
 In the current profile view, we load a Django form for a user to create
 a message, just like we do in Yesod. This form is located in the
-`forms.py` file. The form, as seen in code block
- \[code:djangoMessageForm\], is a class where variables map to input
+`forms.py` file. The form is a class where variables map to input
 names. The Django form only requires one field, the message. No hidden
 fields are used to determine the user that created a message, this is
 done in the view itself.
 
-    	class NewWireForm(forms.Form):
-    		message = forms.CharField(widget=forms.Textarea(attrs={'rows': '3', 'cols': '40'}), label='Message', max_length=280)
+```Python
+class NewWireForm(forms.Form):
+	message = forms.CharField(widget=forms.Textarea(attrs={'rows': '3', 'cols': '40'}), label='Message', max_length=280)
+```
 
 When the form is submitted, a post request is sent to the function-based
-view seen in code block  \[code:djangoCreateMessageView\]. In this view,
+view seen in the code block  below. In this view,
 the following conditions are checked: whether or not the request type is
 POST, the validity of the form, and whether or not the user is
 authenticated. If these conditions are true, the message is created and
 saved to the database. If not, an appropriate error message is rendered.
 
-    	def create_message(request):
-    		"""
-    		Create a message for the logged in user
+```Python
+def create_message(request):
+	"""
+	Create a message for the logged in user
 
-    		:param request: The request sent by the user
-    		:return: Display the profile page with a relevant message
-    		"""
-    		if request.method == 'POST':
-    			form = NewWireForm(request.POST) # Get the form data from the request
-    			if form.is_valid():
-    				if request.user.is_authenticated:
-    					message = form.cleaned_data['message'] # Retrieve the message from the form data
-    					try:
-    						Message.objects.create(message_text=message, created=timezone.now(), user=request.user) # Save the message in the database
-    						messages.success(request, 'Message created successfully', extra_tags='success')
-    						return HttpResponseRedirect(reverse('wire_profile:current_profile'))
-    					except DatabaseError:
-    						messages.error(request, 'Error creating message, please contact support', extra_tags='danger')
-    						return HttpResponseRedirect(reverse('wire_profile:current_profile'))
-    				# ... each else condition renders an appropriate error message
+	:param request: The request sent by the user
+	:return: Display the profile page with a relevant message
+	"""
+	if request.method == 'POST':
+		form = NewWireForm(request.POST) # Get the form data from the request
+		if form.is_valid():
+			if request.user.is_authenticated:
+				message = form.cleaned_data['message'] # Retrieve the message from the form data
+				try:
+					Message.objects.create(message_text=message, created=timezone.now(), user=request.user) # Save the message in the database
+					messages.success(request, 'Message created successfully', extra_tags='success')
+					return HttpResponseRedirect(reverse('wire_profile:current_profile'))
+				except DatabaseError:
+					messages.error(request, 'Error creating message, please contact support', extra_tags='danger')
+					return HttpResponseRedirect(reverse('wire_profile:current_profile'))
+			# ... each else condition renders an appropriate error message
+```
 
 The method to retrieve URL parameters in Django differs depending on the
 type of view you use. For class-based views, URL parameter values are
 retrieved using the `kwargs` variable available in all class-based
-views, as seen in code block  \[code:djangoSearchMessage\]. For
-function-based views, a parameter is added to the function itself, as
-seen in code block  \[code:djangoGetUserIds\].
+views. For function-based views, a parameter is added to the function itself.
 
-    	def get_user_ids(request, user_ids):
-    		"""
-    		Get the users with the given IDs in JSON format
+```Python
+def get_user_ids(request, user_ids):
+	"""
+	Get the users with the given IDs in JSON format
 
-    		:param request: The request that called this function
-    		:param user_ids: The user ids to get the users for
-    		:return: list of users in JSON format
-    		"""
-    		user_ids_list = filter(bool, user_ids.split('/'))
-    		user_ids_list = list(map(int, user_ids_list))
-    		% users = User.objects.filter(pk__in=user_ids_list).values('username')
-    		return JsonResponse(list(users), safe=False)
+	:param request: The request that called this function
+	:param user_ids: The user ids to get the users for
+	:return: list of users in JSON format
+	"""
+	user_ids_list = filter(bool, user_ids.split('/'))
+	user_ids_list = list(map(int, user_ids_list))
+	% users = User.objects.filter(pk__in=user_ids_list).values('username')
+	return JsonResponse(list(users), safe=False)
 
-    	class SearchMessageView(TemplateView):
-    		template_name = 'wire_profile/search_message.html'
+class SearchMessageView(TemplateView):
+	template_name = 'wire_profile/search_message.html'
 
-    		def get(self, request, *args, **kwargs):
-    			"""
-    			Render the matching messages for a search message query
+	def get(self, request, *args, **kwargs):
+		"""
+		Render the matching messages for a search message query
 
-    			:param request: The current request
-    			:param args: sent to parent method
-    			:param kwargs: sent to parent method
-    			:return: Render the search message results page
-    			"""
-    			query = self.kwargs['query']
-    			search_results = Message.objects.filter(message_text__icontains=query).all()
-    			context = self.get_context_data(**kwargs)
-    			context['search_results'] = search_results
-    			return self.render_to_response(context)
+		:param request: The current request
+		:param args: sent to parent method
+		:param kwargs: sent to parent method
+		:return: Render the search message results page
+		"""
+		query = self.kwargs['query']
+		search_results = Message.objects.filter(message_text__icontains=query).all()
+		context = self.get_context_data(**kwargs)
+		context['search_results'] = search_results
+		return self.render_to_response(context)
+```
 
 ### Templates
 
@@ -564,39 +588,40 @@ JavaScript file. The Django template language can be used to perform
 variable interpolation, conditional checks, loops, and creating default
 blocks of code that can be reused in other templates. Rendering these
 files executes the the template logic that the file contains.
-[@djangoTemplates]
 
-    	{% extends "base/global/base.html" %}
+```Django
+{% extends "base/global/base.html" %}
 
-    	{% load django_bootstrap_breadcrumbs %}
-    	{% load bootstrap3 %}
-    	{% load static %}
-    	
-    	{% block breadcrumbs %}
-    		{{ block.super }}
-    		{% breadcrumb "Search" "wire_profile:search" %}
-    	{% endblock %}
-    	
-    	{% block title %}
-    		Search
-    	{% endblock %}
-    	
-    	{% block content %}
-    	<main>
-    		<div class="container">
-    			<div class="row">
-    				<div class="col-sm-12">
-    					<form id="search-form" class="inline form-horizontal" role=form method=post action="/search">
-    						{% csrf_token %}
-    						{% bootstrap_form form %}
-    					</form>
-    				</div>
-    			</div>
-    		</div>
-    	</main>
-    	{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% load bootstrap3 %}
+{% load static %}
 
-Code block  \[code:djangoSearchTemplate\] contains the source code for
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Search" "wire_profile:search" %}
+{% endblock %}
+
+{% block title %}
+	Search
+{% endblock %}
+
+{% block content %}
+<main>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<form id="search-form" class="inline form-horizontal" role=form method=post action="/search">
+					{% csrf_token %}
+					{% bootstrap_form form %}
+				</form>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}
+```
+
+The cobe block above is the source code for
 the template file used to render the search page. In this file, a base
 template is loaded, which is a full HTML page with the content divided
 up into a number of blocks. These blocks are then overridden in the
@@ -612,53 +637,56 @@ Django tests are contained in the `tests.py` file within an app. Tests
 are functions within a class. The process for testing in Django is
 similar to Yesod: we create any needed database entities at the
 beginning of a test, make a request, and check to see if the response is
-what we expect. Code block  \[code:djangoCurrentProfileTest\] is a test
+what we expect. The code block below is a test
 where a user account is created, logged in, and then the profile page
 for the user is loaded. Django does not have the functionality available
 in Yesod that allows you to test the content of a HTML page using CSS
 selectors, so instead, we test that the correct template is being loaded
 with the expected template variables.
 
-    	class CurrentProfileViewTest(TestCase):
-    		# Other tests...
-    		def test_current_profile_page_for_logged_in_users(self):
-    			user = User.objects.create_user('testfoo', 'test@test.com', 'test')
-    			self.client.post(reverse('base:verify'), {'username': user.username, 'password': 'test'})
-    			response = self.client.get(reverse('wire_profile:current_profile'))
+```Python
+class CurrentProfileViewTest(TestCase):
+	# Other tests...
+	def test_current_profile_page_for_logged_in_users(self):
+		user = User.objects.create_user('testfoo', 'test@test.com', 'test')
+		self.client.post(reverse('base:verify'), {'username': user.username, 'password': 'test'})
+		response = self.client.get(reverse('wire_profile:current_profile'))
 
-    			self.assertEqual(response.status_code, 200)
-    			self.assertEqual(response.context['user'], user)
-    			self.assertIsInstance(response.context['form'], NewWireForm)
-    			self.assertTemplateUsed(response, 'wire_profile/current_profile.html')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.context['user'], user)
+		self.assertIsInstance(response.context['form'], NewWireForm)
+		self.assertTemplateUsed(response, 'wire_profile/current_profile.html')
+```
 
-In Django, we can still examine the content of a response, as seen in
-code block  \[code:djangoCheckJsonResponse\]. In this block, we make a
+In Django, we can still examine the content of a response, as seen below.
+In this block, we make a
 JSON request, decode the response, and ensure that the response content
 contains the expected data.
 
-    	class GetUserIdsTest(TestCase):
-    		# Other tests...
-    		def test_get_user_ids_one_user(self):
-    			user = User.objects.create_user('foo', 'test@test.com', 'test')
-    			user2 = User.objects.create_user('bar', 'bar@test.com', 'test')
-    			user3 = User.objects.create_user('baz', 'baz@test.com', 'test')
+```Python
+class GetUserIdsTest(TestCase):
+	# Other tests...
+	def test_get_user_ids_one_user(self):
+		user = User.objects.create_user('foo', 'test@test.com', 'test')
+		user2 = User.objects.create_user('bar', 'bar@test.com', 'test')
+		user3 = User.objects.create_user('baz', 'baz@test.com', 'test')
 
-    			response = self.client.get(reverse('wire_profile:get_user_ids', kwargs={'user_ids': str(user.id) + '/'}))
-    			response_content = response.content.decode()
+		response = self.client.get(reverse('wire_profile:get_user_ids', kwargs={'user_ids': str(user.id) + '/'}))
+		response_content = response.content.decode()
 
-    			self.assertEqual(response.status_code, 200)
-    			self.assertIn('"username": "' + user.username + '"', response_content)
-    			self.assertNotIn('"username": "' + user2.username + '"', response_content)
-    			self.assertNotIn('"username": "' + user3.username + '"', response_content)
+		self.assertEqual(response.status_code, 200)
+		self.assertIn('"username": "' + user.username + '"', response_content)
+		self.assertNotIn('"username": "' + user2.username + '"', response_content)
+		self.assertNotIn('"username": "' + user3.username + '"', response_content)
+```
 
 Comparison of Django and Yesod
 ------------------------------
 
 This section consists of a comparison of both frameworks. A series of
 experiments were conducted as specified in the plan, the raw results of
-which can be found in appendix  \[app:Experiments\]. These results will
-be discussed along with features and limitations of both frameworks that
-stand out.
+which can be found in the appendix of the [original thesis](final_report.pdf). These results will be discussed along
+with features and limitations of both frameworks that stand out.
 
 To ensure that the results we collected were as fair as possible, two
 Amazon EC2 servers were created. The configuration of both servers were
@@ -673,52 +701,45 @@ built-in support for a tool called Keter, a Haskell application that can
 act as a web server. After Keter was installed and configured on the
 Amazon EC2 server, a Keter binary was created using commands built-in to
 Yesod. This binary file can simply be transferred onto the server, and
-Keter will start serving the web application to visitors. [@yesodBook
-Deploying your Webapp]
+Keter will start serving the web application to visitors.
 
 For the Django website, nginx, an open source web server was installed.
 nginx acts as a reverse proxy to the Django application, which is being
 run by a tool called Gunicorn (‘Green Unicorn’). Gunicorn is a WSGI
 (‘Web Server Gateway Interface’) tool that can be used on Unix systems.
-[@djangoGunicorn] This means that Gunicorn can allow nginx to use Django
+This means that Gunicorn can allow nginx to use Django
 to serve the web application.
 
-### Page Load Speed {#sec:pageLoadSpeed}
+### Page Load Speed 
 
 When testing page load speeds, each page was loaded three times. The
 time taken for each run was recorded as well as an average. In this
-section, we will be discussing the average times that were recorded. The
-raw results can be found in section  \[sec:pageLoadSpeeds\] in the
-appendix.
+section, we will be discussing the average times that were recorded.
 
 Page load speeds for Yesod are noticeably quicker than Django, with
 Yesod loading most pages around 200ms faster. For example, on average,
 the home page takes about 511ms to load in the Yesod framework, and
 750ms to load in the Django framework. Creating a new message and then
 redirecting back to the profile page takes about 679ms in Yesod and
-849ms in Django. See table  \[tab:pageLoadAverageSpeeds\] for a full
-list of results.
+849ms in Django.
 
-  Page                            Average Speed in Yesod (ms)   Average Speed in Django (ms)
-  ----------------------------- ----------------------------- ------------------------------
-  Home Page                                            511.00                         753.33
-  Search Page                                          517.33                         756.33
-  Login Page                                           443.67                         821.33
-  Signup Page                                          490.33                         764.00
-  Creating an Account                                  504.33                         748.67
-  Logging in to an Account                             547.33                         722.67
-  Logging out                                          510.33                         761.33
-  Current user’s Profile Page                          617.00                         930.00
-  Other user’s Profile Page                            651.33                         908.67
-  Creating a Message                                   679.33                         848.67
-  Search for a Message                                 513.33                         766.33
-  Search for a User                                    519.00                         756.67
+Page                         |   Average Speed in Yesod (ms) |  Average Speed in Django (ms)
+-----------------------------| ----------------------------- |------------------------------
+Home Page                    |                        511.00 |                        753.33
+Search Page                  |                        517.33 |                        756.33
+Login Page                   |                        443.67 |                        821.33
+Signup Page                  |                        490.33 |                        764.00
+Creating an Account          |                        504.33 |                        748.67
+Logging in to an Account     |                        547.33 |                        722.67
+Logging out                  |                        510.33 |                        761.33
+Current user’s Profile Page  |                        617.00 |                        930.00
+Other user’s Profile Page    |                        651.33 |                        908.67
+Creating a Message           |                        679.33 |                        848.67
+Search for a Message         |                        513.33 |                        766.33
+Search for a User            |                        519.00 |                        756.67
 
-  : Average Page Load Speeds
 
-\[tab:pageLoadAverageSpeeds\]
-
-As you can see in table in table  \[tab:pageLoadAverageSpeeds\], Yesod
+As you can see the table above, Yesod
 consistently outperforms Django. This could be for a number of reasons:
 Yesod automatically minimises static files like CSS or JavaScript;
 Haskell is compiled rather than interpreted, and compiled code generally
@@ -738,21 +759,18 @@ had 80 users load a specific page in a short amount of time, typically
 25 seconds. The results of these tests can be found in table
  \[tab:loadTests\].
 
-  Page              Yesod (s)   Django (s)
-  ----------------- ----------- ------------
-  Home              4.96        5.54
-  Profile 1st Run   5.05        4.94
-  Profile 2nd Run   4.97        5.13
-  Average           4.99        5.20
+Page             | Yesod (s)  | Django (s)
+-----------------| -----------| ------------
+Home             | 4.96       | 5.54
+Profile 1st Run  | 5.05       | 4.94
+Profile 2nd Run  | 4.97       | 5.13
+Average          | 4.99       | 5.20
 
-  : Load Testing Page Load Speeds
-
-\[tab:loadTests\]
 
 As you can see in the table above, Yesod is around 200-500ms faster than
 Django when under load. This difference is consistent with the results
-found in section  \[sec:pageLoadSpeed\]. The high loading times seen in
-these tests is probably because the servers are being are not very
+found in our previous experiment. The high loading times seen in
+these tests is probably because the servers being used are not very
 powerful.
 
 The tests also recorded the total amount of data downloaded for all
@@ -766,7 +784,7 @@ on the other hand, transfers 243.49kB of data.
 ### Resource Usage
 
 Resource usage on both servers was measured after running the
-experiments detailed in section  \[sec:pageLoadSpeed\]. All the
+page load speed experiments. All the
 information in this section was obtained by examining output from htop,
 a process viewer. On the server running Yesod, 109MB of RAM was being
 used. The server running Django used 125MB of RAM.
@@ -822,28 +840,31 @@ Django, simulated mistakes were made in both frameworks.
 The first simulated mistake we made was, when creating a message, try to
 save the form data object into the database rather than the actual
 message stored inside this object. The code change in Yesod can be seen
-in code block  \[code:yesodMessageT1L\], and the Django change can be
-seen in code block  \[code:djangoMessageT1L\].
+in first code block below, and the Django change can be
+seen in the second code block.
 
-    	(Entity userId _) <- requireAuth -- get the user id
-    	((result, _), _) <- runFormPost $ messageForm userId -- get the form data
-    	case result of
-    		FormSuccess message -> do -- if it's a valid form, get the message
-    			-- _ <- runDB . insert $ message -- original line, insert message
-    			_ <- runDB . insert $ result -- new line, insert form data
+```Haskell
+(Entity userId _) <- requireAuth -- get the user id
+((result, _), _) <- runFormPost $ messageForm userId -- get the form data
+case result of
+	FormSuccess message -> do -- if it's a valid form, get the message
+		-- _ <- runDB . insert $ message -- original line, insert message
+		_ <- runDB . insert $ result -- new line, insert form data
+```
 
-    	form = NewWireForm(request.POST) -- get the form
-    	if form.is_valid():
-    		if request.user.is_authenticated:
-    			message = form.cleaned_data['message'] -- form.cleaned_data is a map of form values
-    			try:
-    				# Message.objects.create(message_text=message, ..) # original line, store the message
-    				Message.objects.create(message_text=form.cleaned_data, ..) # changed line 1, store form values
-    				# Message.objects.create(message_text=form, ..) # changed line 2, after previous line passed, store form object
+```Python
+form = NewWireForm(request.POST) -- get the form
+if form.is_valid():
+	if request.user.is_authenticated:
+		message = form.cleaned_data['message'] -- form.cleaned_data is a map of form values
+		try:
+			# Message.objects.create(message_text=message, ..) # original line, store the message
+			Message.objects.create(message_text=form.cleaned_data, ..) # changed line 1, store form values
+			# Message.objects.create(message_text=form, ..) # changed line 2, after previous line passed, store form object
+```
 
-For Yesod, the simulated error caused a compilation error, with the
-exception message complaining about mismatched types, as seen in code
-block  \[code:yesodT1E\]. For Django, however, no exception was thrown,
+For Yesod, the simulated error caused a compilation error (shown below), with the
+exception message complaining about mismatched types. For Django, however, no exception was thrown,
 even when submitting the message. Further investigation showed that
 Python was converting the form data into a string, and then saved this
 string in the database. Because the message was saved in the database,
@@ -852,12 +873,14 @@ message table, passed. This test was later amended to check the actual
 content of the message, and failed appropriately when the mistake was
 reintroduced.
 
-    	- Couldn't match type `PersistEntityBackend (FormResult Message)'
-    	with `SqlBackend'
-    	arising from a use of `insert'
-    	- In the second argument of `(.)', namely `insert'
-    	In the expression: runDB . insert
-    	In a stmt of a 'do' block: _ <- runDB . insert $ result
+```
+- Couldn't match type `PersistEntityBackend (FormResult Message)'
+with `SqlBackend'
+arising from a use of `insert'
+- In the second argument of `(.)', namely `insert'
+In the expression: runDB . insert
+In a stmt of a 'do' block: _ <- runDB . insert $ result
+```
 
 In the second test, we simply misspelled a variable name. This would
 normally be caught by most editors but it would be useful to see the
@@ -865,24 +888,28 @@ error message produced as a result of a particularly common mistake.
 This mistake was done in the piece of code that returns data for
 recommended users in JSON format. This is used as part of an AJAX
 request to display recommended users to the user on the profile page.
-See code block  \[code:yesodVarT2\] for the Yesod change and code block
- \[code:djangoVarT2\] for the Django change.
+As before, the first code block shows the Yesod change and the second
+code block is the Django change.
 
-    	Entity userId user <- requireAuth
-    	followers <- runDB $ selectList [FollowFollowerId ==. userId] []
-    	-- See: https://stackoverflow.com/questions/36727794/haskell-persistent-reusing-selectlist
-    	let followingIds = map (\(Entity _ (Follow _ followingId)) -> followingId) followers
-    	users <- runDB $ selectList [UserUsername !=. userUsername user, UserId /<-. followingIds] [LimitTo 5]
-    	let cleanUsers = map (\(Entity uid (User uname _ _)) -> (object ["id" .= uid, "username" .= uname])) users
-    	-- returnJson cleanUsers -- original line
-    	returnJson cleanUser -- new line
+```Haskell
+Entity userId user <- requireAuth
+followers <- runDB $ selectList [FollowFollowerId ==. userId] []
+-- See: https://stackoverflow.com/questions/36727794/haskell-persistent-reusing-selectlist
+let followingIds = map (\(Entity _ (Follow _ followingId)) -> followingId) followers
+users <- runDB $ selectList [UserUsername !=. userUsername user, UserId /<-. followingIds] [LimitTo 5]
+let cleanUsers = map (\(Entity uid (User uname _ _)) -> (object ["id" .= uid, "username" .= uname])) users
+-- returnJson cleanUsers -- original line
+returnJson cleanUser -- new line
+```
 
-    	if request.user.is_authenticated:
-    	follow_query = Follow.objects.filter(follower_id=request.user)
-    	users = User.objects.filter().exclude(id=request.user.id).exclude(username=excluded_username)\
-    		.exclude(followed_user__in=follow_query).values('username')[:5]
-    	# return JsonResponse(list(users), safe=False)  # original line
-    	return JsonResponse(list(user), safe=False)  # new line
+```Python
+if request.user.is_authenticated:
+follow_query = Follow.objects.filter(follower_id=request.user)
+users = User.objects.filter().exclude(id=request.user.id).exclude(username=excluded_username)\
+	.exclude(followed_user__in=follow_query).values('username')[:5]
+# return JsonResponse(list(users), safe=False)  # original line
+return JsonResponse(list(user), safe=False)  # new line
+```
 
 The change caused a compilation error in Yesod. The exception message
 complained about the misspelled variable not being in scoped, and
@@ -893,8 +920,10 @@ browser showed that the AJAX request responded with a 500 error. Loading
 the URL used in the AJAX request displayed an exception, with a stack
 trace and a message that said “name ‘user’ is not defined”.
 
-    	Variable not in scope: cleanUser
-    	Perhaps you meant `cleanUsers' (line 19)
+```
+Variable not in scope: cleanUser
+Perhaps you meant `cleanUsers' (line 19)
+```
 
 ### Documentation
 
@@ -937,9 +966,7 @@ search for the error message and come across forum posts discussing
 solutions for the exact same error that you are having.
 
 Yesod, on the other hand, has a much smaller community. It is likely
-that you are the only person experiencing a certain issue. This was
-certainly the case for when Freckle migrated to Yesod, as discussing in
-chapter  \[chap:Background\]. Because of this, beginners will likely
+that you are the only person experiencing a certain issue. Because of this, beginners will likely
 find it harder to solve issues with Yesod when compared to Django.
 
 Although the Haskell community is small, experienced developers are
@@ -994,192 +1021,3 @@ of Haskell’s static types and type safety.
 In conclusion, Yesod is a production ready framework. It is used in the
 real world, can keep up and sometimes outperform other popular
 frameworks, has great documentation, and has a helpful community.
-
-Evaluation {#chap:Evaluation}
-==========
-
-In this chapter, we will discuss the websites that we created and the
-quality of our comparison of Yesod and Django. We will look at the
-methods that we used to test each framework, whether or not these
-methods could be improved, and recommendations for further comparisons
-
-The Websites
-------------
-
-The websites that were created were functionally identical. These
-websites were usable, fully functional, and responsive. The websites
-allow users to create accounts, interact with forms, have their own
-profile pages, and search for other users or messages. These features
-are used by many websites in the real-world and by implementing these
-features, we were able to realistically evaluate both frameworks.
-
-There is one feature that was discussed in the project plan but was not
-included in the final implementation of our websites, and that was the
-messaging feature. This feature was planned to be implemented towards
-the end of development and would have evaluated the difficulty of making
-a large change to both frameworks. Due to time constrains, it was
-decided to abandon this feature and instead, run some measurable tests
-to quickly and reliably obtain some concrete data.
-
-Site Hosting
-------------
-
-Both of the websites were hosted on Amazon EC2 servers located in the
-same place with identical hardware specifications. This ensured that the
-only differing factor in our tests was the framework being used, giving
-us fair results. There is, however, one issue with the servers used,
-they were very underpowered, with 1GB of RAM and 1 CPU core. This may
-have been a limiting factor when measuring the performance of the
-frameworks, affecting our results. It would have been ideal to use a
-powerful server for our tests, but choices were limited with no budget
-available to host a more powerful server.
-
-Testing Methods
----------------
-
-This section will go through each experiment that was performed on the
-frameworks. We will discuss the merits of the test, the reliability of
-our results, and any way we could improve the test.
-
-### Page Load Speed Tests
-
-These tests were performed on identical servers and were repeated three
-times. The time taken to load the page was taken from Chromium’s
-developer tools under the network tab. An average was measured and this
-value was used for the actual comparison. This ensured that the results
-we measured were reliable and accurate. Measuring page load speeds is
-also an excellent way of measuring the performance of a web framework,
-as keeping page load speeds as low as possible is very important in
-order to ensure visitors do not get annoyed at having to wait long
-periods of time to load a page.
-
-The reliability of results could have been improved by performing more
-repeats of our experiments. We could have measured the load time of
-specific AJAX requests to see if any stand out. Using servers with
-different specifications would also have been useful in order to see how
-more or less powerful hardware affects page load speeds.
-
-### Load Tests
-
-Load tests were performed using a free service called RedLine13. With
-RedLine13, we were able to use a free Amazon EC2 instance to perform
-load tests. Unfortunately, these instances were limited to 80 users so
-we were not able to perform a large load test over a number of hours. We
-also only repeated this experiment three times in order to stay within
-Amazon’s usage limits.
-
-The results that we obtained from this experiment confirmed what we
-found in the Page Load speed experiment, Pages in Yesod load 200-500ms
-faster than pages in Django. This experiment also resulted in high page
-load times of around 5 seconds. This is most likely because of how weak
-the hosting servers are. Using a powerful server would have been very
-useful to see how each framework works under very heavy loads.
-
-This experiment also told us that Yesod requests send much less data
-than Django due to the way Yesod minimises all static files by default.
-Using less data is a very desirable feature for web frameworks, as
-website visitors may be on limited plans and would prefer not to use
-websites that send a lot of data to their devices.
-
-### Resource Usage
-
-This value was only measured once after the page load speed experiments
-were complete. Because of this, this value is not very reliable.
-Repeating our measurements and calculating an average would definitely
-increase the reliability of this result. It would have also been useful
-to measure this value every hour for an extended period of time, say, 24
-hours. This would tell us how memory usage varies over time, and would
-tell us if there’s any bug in the framework that may cause memory leaks.
-
-The value that we recorded did tell us that resource usage is very
-similar in both frameworks, with Yesod coming out on top. This is a
-useful value for readers to know as some users will be mindful of
-resource usage when choosing a web framework for their project.
-
-### Continuous Integration
-
-The values we got for this were from Travis CI’s web interface. Travis
-CI was first integrated with the Yesod repository. It was added to the
-Django repository at a later date. This meant that there are much more
-build times in the Yesod repository compared to the Django repository.
-It would have been useful to have a similar number of builds to allow us
-to calculate a reliable average for build times.
-
-The value itself may be useful for developers who are concerned with
-long build times, but builds are completed in under five minutes for
-both repositories. This informs readers that testing in both frameworks
-does not take a significant amount of time, which would be a concern for
-developers who adopt a test driven methodology.
-
-### Debugging
-
-The simulated errors we performed in this test proved how the Haskell
-compiler can save the developer a lot of time when developing a website.
-In the first test, the compiler caught a bug where a new message was
-being saved using the form data itself rather than the message from the
-form data. This same bug was not caught by the Python interpreter. In
-fact, Python automatically converted the form data, which was a map,
-into a string, and stored the value in the database. A test case had to
-be added to ensure that this would be caught if a similar mistake would
-occur in the future.
-
-The second test, misspelling a variable name, also highlighted how the
-Haskell compiler can help developers quickly figure out how to fix their
-mistakes. The Haskell compiler printed a message stating the actual
-variable name that was misspelt. In this case, the Python interpreter
-also printed an appropriate exception message which mentioned that the
-variable used was undefined.
-
-Further Comparisons
--------------------
-
-A refactor towards the end of development would have been very useful in
-our comparison. It would have given us information on how the Haskell
-compiler can guide you during a refactor. In theory, if you start the
-refactor as a small change and then compile your program, the Haskell
-compiler should guide you on where further changes need to be made. For
-example, if we decide to add a new field to the message entity, the
-Haskell compiler should tell us where the message entity is being used,
-helping us efficiently refactor our program.
-
-Under the free usage limits of Amazon Web Services, available EC2
-servers are not very powerful and the monitoring tools are only updated
-every five minutes. Because of this, only very limited load testing
-could be performed, with a maximum of 80 users. Monitoring tools are
-also only updated every five minutes under the free plan, making it
-infeasible to monitor load usage during a test. These tests did tell us
-the amount of time it took to load a page and the total amount of data
-transferred, but it would have been useful to know how the web
-frameworks handle longer load tests. Longer load tests would have also
-told us how each framework manages resources during extended periods of
-load. These tests may have identified issues such as memory leaks if
-they were able to be conducted.
-
-Conclusion
-==========
-
-In this report, we have discussed how we evaluated a Haskell web
-framework. We compared two frameworks, a Haskell framework called Yesod,
-and a Python framework called Django. We gave a high-level explanation
-of how the two frameworks worked and explained the preparation needed
-before development could be started in both frameworks. We also
-discussed the process of creating a website in both frameworks
-
-Once the websites were complete, we performed tests to compare each
-framework. These tests were used to: evaluate the performance of each
-framework, compare how the language features of each framework help or
-hinder web development, and test the resource efficiency of each
-framework. After performing these tests and discussing the results, we
-wrote a section that discussed who we would recommend the Yesod
-framework to. Overall, Yesod is a production ready framework that is
-ready to be used (and has been used), in the real world.
-
-Personally, this project has greatly improved my own academic and
-development skills. I gained a lot of knowledge of the Haskell
-programming language by getting some hands on experience with Yesod, a
-framework that uses a lot of advanced features of Haskell. By writing
-this report, my academic research and writing skills have greatly
-improved, as I had to perform a lot of research on existing scientific
-journals about Haskell web frameworks. I have also made some
-contributions to open source Haskell projects, and have become more
-interested in the academic side of Computer Science.
