@@ -977,7 +977,7 @@ by beginners. Developers can also join the \#haskell-beginners IRC
 channel where they can speak to an experienced developer about their
 issues in real time.
 
-### Recommendations
+### Conclusion
 
 After running all of our tests, we can see that a relatively niche
 framework like Yesod can keep up with a giant like Django. If you’re an
