@@ -95,8 +95,12 @@ For our website, we created two apps, `base` and `wire_profile`.
 
 The two figures below give you an overview of each framework.
 
+#### Yesod Overview, From the Request to the Response
+
 ![An overview of Yesod, from the Request to the Response<span
 data-label="fig:yesodOverview"></span>](final_report/pics/yesod_diagram.png)
+
+#### Django Overview, From the Request to the Response
 
 ![An overview of Django, from the Request to the Response<span
 data-label="fig:djangoOverview"></span>](final_report/pics/django_diagram.png)
