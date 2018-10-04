@@ -1,7 +1,7 @@
 # Yesod vs Django: A Web Developers Comparison
 
 This article is based on a thesis for the final year of my undergraduate course. The full thesis can be found
-[here](final_report.pdf).
+[here](pdf_documents/final_report.pdf).
 
 In this article, we provide a comparison of two web frameworks; a Haskell
 framework called Yesod, and a Python framework called Django. This article
@@ -555,7 +555,7 @@ class GetUserIdsTest(TestCase):
 
 This section consists of a comparison of both frameworks. A series of
 experiments were conducted as specified in the plan, the raw results of
-which can be found in the appendix of the [original thesis](final_report.pdf). These results will be discussed along
+which can be found in the appendix of the [original thesis](pdf_documents/final_report.pdf). These results will be discussed along
 with features and limitations of both frameworks that stand out.
 
 To ensure that the results we collected were as fair as possible, two
